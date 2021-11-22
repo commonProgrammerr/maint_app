@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "miimo_expo",
+    "slug": "miimo_expo",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "miimo_expo"
+}
