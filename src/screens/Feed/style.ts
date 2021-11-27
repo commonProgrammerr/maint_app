@@ -53,6 +53,6 @@ export const UserWrampper = styled.View`
 
 export const Icon = styled(Feather)`
   font-size: ${RFValue(24)}px;
-  color: ${({ theme }) => theme.colors.secondary};
+  color: ${({ theme }) => theme.colors.shape};
 
 `

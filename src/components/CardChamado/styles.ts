@@ -2,6 +2,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
 
 import { FontAwesome5 } from '@expo/vector-icons'
+import { ChamadosTypes } from '../../context/chamados-context/types';
 
 export const Container = styled.TouchableOpacity`
   background-color: ${({ theme }) => theme.colors.shape};
@@ -21,16 +22,30 @@ export const Header = styled.Text`
   color: ${({ theme }) => theme.colors.title};
   font-size: ${RFValue(14)}px;
 `
-export const Content = styled.Text`
+
+interface ContentProps {
+  chamadoType: ChamadosTypes
+}
+export const Content = styled.Text<ContentProps>`
   font-family: ${({ theme }) => theme.fonts.medium};
-  color: ${({ theme }) => theme.colors.attention};
   font-size: ${RFValue(22)}px;
   margin-top: 6px;
+  color: ${({ theme, chamadoType }) => {
+    switch (chamadoType) {
+      case ChamadosTypes.ENTUPIMENTO:
+        return theme.colors.attention;
+
+      case ChamadosTypes.AJUDA:
+        return theme.colors.secondary;
+      default:
+        return theme.colors.text + '90';
+    }
+  }};
   `
 export const Footer = styled.View`
   width: 100%;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   margin-top: 14px;
 `
@@ -41,7 +56,6 @@ export const SubDescription = styled.Text`
 `
 export const DescriptionContainer = styled.View`
   flex-direction: row;
-  /* align-items: center; */
 `
 
 export const Icon = styled(FontAwesome5)`

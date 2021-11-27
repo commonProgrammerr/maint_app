@@ -1,5 +1,6 @@
 import React from "react";
 import { useChamadosContext } from "../../context/chamados-context";
+import { ChamadosTypes } from "../../context/chamados-context/types";
 
 import {
   Container,
@@ -12,33 +13,31 @@ import {
 } from "./styles";
 
 interface CardChamadoProps {
-  id: string;
   data: {
+    type: ChamadosTypes
     piso: string;
     local: string;
     box: number;
     time: string;
   };
+  onPress?: () => void
 }
 
 function CardChamado({
-  id,
   data,
+  onPress,
 }: CardChamadoProps) {
-  const { openChamadoModal } = useChamadosContext();
 
   return (
-    <Container onPress={() => openChamadoModal(id)}>
+    <Container onPress={onPress}>
       <Header>Piso {data.piso} </Header>
-      <Content>{data.local}</Content>
+      <Content chamadoType={data.type}>
+        {data.local}
+      </Content>
       <Footer>
         <DescriptionContainer>
           <Icon name="toilet" />
           <SubDescription>Box {data.box}</SubDescription>
-        </DescriptionContainer>
-        <DescriptionContainer>
-          <Icon name="clock" />
-          <SubDescription>{data.time}</SubDescription>
         </DescriptionContainer>
       </Footer>
     </Container>

@@ -8,8 +8,16 @@ import CardChamado from "../CardChamado";
 
 import { Container, Label, ListaDeChamados } from "./styles";
 
-function CallsList() {
+
+interface CallsListProps {
+  handleOpenModal: (id: string) => void
+}
+
+function CallsList({
+  handleOpenModal
+}:CallsListProps) {
   const { chamadosAtivos } = useChamadosContext();
+
   return (
     <Container>
       <Label>Chamados</Label>
@@ -17,9 +25,9 @@ function CallsList() {
         data={chamadosAtivos}
         renderItem={({ item }) => {
           const { id, ...data } = item as ChamadoType;
-          return <CardChamado id={id} data={data} />;
+          return <CardChamado data={data} onPress={() => handleOpenModal(id)} />;
         }}
-        // keyExtractor={(item) => item?.id}
+        keyExtractor={(item) => item?.id}
         showsHorizontalScrollIndicator={false}
       />
     </Container>

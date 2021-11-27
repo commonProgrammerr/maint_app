@@ -1,8 +1,9 @@
 import styled, { css } from "styled-components/native";
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
-import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
+import { FontAwesome5 } from "@expo/vector-icons";
 
 import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { ChamadosTypes } from "../../../context/chamados-context/types";
 
 export const Container = styled(GestureHandlerRootView)`
   background-color: ${(props) => props.theme.colors.shape};
@@ -30,7 +31,7 @@ export const TimeInfo = styled.Text`
 `;
 
 interface StatusProps {
-  status: "entupido" | "help";
+  type?: ChamadosTypes;
 }
 
 export const StatisWrapper = styled.View<StatusProps>`
@@ -42,18 +43,19 @@ export const StatisWrapper = styled.View<StatusProps>`
   align-items: center;
   justify-content: center;
   ${(props) => {
-    if (props.status === "entupido") {
-      return css`
-        background-color: ${props.theme.colors.attention};
-      `;
-    } else if (props.status === "help") {
-      return css`
-        background-color: ${props.theme.colors.secondary};
-      `;
-    } else {
-      return css`
-        background-color: ${props.theme.colors.text};
-      `;
+    switch (props.type) {
+      case ChamadosTypes.ENTUPIMENTO:
+        return css`
+          background-color: ${props.theme.colors.attention};
+        `;
+      case ChamadosTypes.AJUDA:
+        return css`
+          background-color: ${props.theme.colors.secondary};
+        `;
+      default:
+        return css`
+          background-color: ${props.theme.colors.text};
+        `;
     }
   }}
 `;
@@ -68,51 +70,6 @@ export const StatusText = styled.Text`
   font-size: ${RFValue(22)}px;
   font-family: ${(props) => props.theme.fonts.bold};
   color: ${(props) => props.theme.colors.shape};
-`;
-export const InfoGrid = styled.View`
-  flex: 1;
-  flex-direction: row;
-  justify-content: space-around;
-  margin-top: 20px;
-  margin-bottom: 50px;
-`;
-
-export const GridCollumn = styled.View`
-  align-items: flex-start;
-  justify-content: space-around;
-`;
-
-export const GridItem = styled.View`
-  flex-direction: row;
-  align-items: center;
-`;
-
-const infoIconsStyle = css`
-  font-size: ${RFValue(22)}px;
-  color: ${(props) => props.theme.colors.title};
-  margin-right: 8px;
-`;
-
-export const InfoIcon = styled(FontAwesome5)`
-  ${infoIconsStyle}
-  font-size: ${RFValue(20)}px;
-`;
-export const ElevatorIcon = styled(MaterialCommunityIcons).attrs({
-  name: "elevator-passenger",
-})`
-  ${infoIconsStyle}
-  margin-left: -3.5px;
-`;
-export const WCIcon = styled(MaterialCommunityIcons).attrs({
-  name: "human-male-female",
-})`
-  ${infoIconsStyle}
-  margin-left: -3.5px;
-`;
-export const Info = styled.Text`
-  font-size: ${RFValue(14)}px;
-  font-family: ${(props) => props.theme.fonts.medium};
-  color: ${(props) => props.theme.colors.title};
 `;
 export const AceptDeclineWrapperr = styled.View`
   flex-direction: row;

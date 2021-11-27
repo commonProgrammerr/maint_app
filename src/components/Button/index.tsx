@@ -9,11 +9,12 @@ interface ButtonProps {
   children: ReactNode;
   onPress?: () => void
   bgColor: keyof typeof theme.colors
+  style?: any
 }
 
-function Button({ children, bgColor, onPress }: ButtonProps) {
+function Button({ children, bgColor, onPress, style }: ButtonProps) {
   return (
-    <Container bgColor={bgColor} onPress={onPress} >
+    <Container bgColor={bgColor} onPress={onPress} style={style} >
       {children}
     </Container>
   );
