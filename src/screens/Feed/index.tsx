@@ -9,6 +9,7 @@ import {
   UserName,
   UserWrampper,
   Icon,
+  ExitButton,
 } from "./style";
 import CallsList from "../../components/calls-list";
 import CallRequestModal from "../../components/modals/CallRequest";
@@ -42,7 +43,9 @@ export function FeedScreen({ navigation }: FeedScreenProps) {
               <UserName>André</UserName>
             </User>
           </UserInfo>
-          <Icon name="log-out" />
+          <ExitButton>
+            <Icon name="log-out" />
+          </ExitButton>
         </UserWrampper>
       </Header>
       <CallsList handleOpenModal={handleOpemModal} />

@@ -18,33 +18,31 @@ import {
   Title,
 } from "./styles";
 
-export function ChamadoScreen({
-  route,
-  navigation,
-}: ChamdoScreenProps) {
+export function ChamadoScreen({ route, navigation }: ChamdoScreenProps) {
   const image_url =
     "https://www.melhoresdestinos.com.br/wp-content/uploads/2020/09/aeroporto-curitiba-banheiros.jpg";
 
   const { id } = route.params;
   const { getChamadoData } = useChamadosContext();
   const [dados, setDados] = useState(() => getChamadoData(id));
+  const [value, setValue] = useState(null);
 
-  function handleGetTitle(type?: ChamadosTypes ) {
+  function handleGetTitle(type?: ChamadosTypes) {
     switch (type) {
       case ChamadosTypes.ENTUPIMENTO:
-        return 'Entupimento'
-      
+        return "Entupimento";
+
       case ChamadosTypes.AJUDA:
-        return 'Requisição de Ajuda'
-    
+        return "Requisição de Ajuda";
+
       default:
-        return '??????????';
+        return "??????????";
     }
   }
 
   return (
     <Container>
-      <Header type={dados?.type} >
+      <Header type={dados?.type}>
         <AlertIcon />
         <Title>{handleGetTitle(dados?.type)}</Title>
       </Header>
@@ -61,7 +59,9 @@ export function ChamadoScreen({
         )}
       </DetailsWrapper>
       <ButtonsWrapper>
-        <EndButton>
+        <EndButton onPress={() => navigation.navigate('Report', {
+          id
+        })}>
           <ButtonsText>Finalizar Chamado</ButtonsText>
         </EndButton>
         <ReportButton>

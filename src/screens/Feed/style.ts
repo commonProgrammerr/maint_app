@@ -54,5 +54,15 @@ export const UserWrampper = styled.View`
 export const Icon = styled(Feather)`
   font-size: ${RFValue(24)}px;
   color: ${({ theme }) => theme.colors.shape};
+  background-color: ${({theme}) => theme.colors.primary};
+  padding: 6px;
 
+`
+
+export const ExitButton = styled.TouchableOpacity`
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  background-color: ${({theme}) => theme.colors.text};
+  /* padding-left: 11px; */
 `

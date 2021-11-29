@@ -3,6 +3,7 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { FeedScreen } from "../screens/Feed";
 import { ChamadoScreen } from "../screens/Chamado";
+import { ReportScreen } from "../screens/Report";
 
 const { Screen, Navigator } = createNativeStackNavigator();
 
@@ -15,7 +16,7 @@ export function AppRoutes() {
     >
       <Screen name="Feed" component={FeedScreen} />
       <Screen name="Chamado" component={ChamadoScreen} />
-      <Screen name="Report" component={ChamadoScreen} />
+      <Screen name="Report" component={ReportScreen} />
       <Screen name="Help" component={ChamadoScreen} />
     </Navigator>
   );

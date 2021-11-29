@@ -1,7 +1,7 @@
-import { ChamadosTypes } from './../../context/chamados-context/types'
-import styled, { css } from 'styled-components/native';
-import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
+import styled from 'styled-components/native';
 import { FontAwesome5 } from '@expo/vector-icons'
+import { ChamadosTypes } from './../../context/chamados-context/types'
+import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
 import Button from '../../components/Button';
 
 export const Container = styled.View`
@@ -46,9 +46,8 @@ export const Title = styled.Text`
   font-size: ${RFValue(24)}px;
   line-height: ${RFValue(33)}px;
   font-family: ${(props) => props.theme.fonts.medium};
-  color: ${(props) => props.theme.colors.shape};
-  
-  `;
+  color: ${(props) => props.theme.colors.shape};  
+`;
 
 
 export const DetailsWrapper = styled.View`
