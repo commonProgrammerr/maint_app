@@ -1,5 +1,5 @@
 import styled from 'styled-components/native';
-import { ChamadoType } from '../../context/chamados-context';
+import { ChamadoType } from '../../context/chamados-context/types';
 import { FlatListProps } from "react-native";
 
 export const Container = styled.View`

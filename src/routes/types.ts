@@ -1,5 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
+
 export type RootStackParamList = {
   Feed: undefined;
   Chamado: { id: string };
@@ -18,8 +19,4 @@ export type ChamdoScreenProps = NativeStackScreenProps<
 export type ReportScreenProps = NativeStackScreenProps<
   RootStackParamList,
   "Report"
->;
-export type HelpScreenProps = NativeStackScreenProps<
-  RootStackParamList,
-  "Help"
 >;

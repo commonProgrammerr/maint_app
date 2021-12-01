@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Modal from "react-native-modal";
 
-import { useChamadosContext } from '../../../context/chamados-context';
+import { useChamadosContext } from "../../../context/chamados-context";
 import {
   ChamadosTypes,
   ChamadoType,
@@ -24,13 +24,17 @@ import {
 } from "./styles";
 import { useNavigation } from "../../../context/use-navigation";
 
-interface CallRequestProps {
+interface RepairRequestModalProps {
   visible: boolean;
   onRequestClose: () => void;
   id: string;
 }
 
-function CallRequest({ id, visible, onRequestClose }: CallRequestProps) {
+export function RepairRequestModal({
+  id,
+  visible,
+  onRequestClose,
+}: RepairRequestModalProps) {
   const { getChamadoData } = useChamadosContext();
   const [chamadoData, setChamadoData] = useState<ChamadoType | undefined>(
     undefined
@@ -42,16 +46,18 @@ function CallRequest({ id, visible, onRequestClose }: CallRequestProps) {
     setChamadoData(getChamadoData(id));
   });
 
-  useEffect(() => onRequestClose, [])
+  useEffect(() => onRequestClose, []);
 
   function handleAceptChamado() {
     onRequestClose?.();
-    navigation?.navigate('Chamado', { id });
+    navigation?.navigate("Chamado", { id });
   }
 
   return (
     <Modal
       isVisible={visible}
+      onDismiss={onRequestClose}
+      onBackdropPress={onRequestClose}
       style={{
         padding: 0,
         margin: 0,
@@ -89,5 +95,3 @@ function CallRequest({ id, visible, onRequestClose }: CallRequestProps) {
     </Modal>
   );
 }
-
-export default CallRequest;

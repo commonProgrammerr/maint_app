@@ -1,21 +1,16 @@
 import React from "react";
-import {
-  ChamadoType,
-  useChamadosContext,
-} from "../../context/chamados-context";
+import { useChamadosContext } from "../../context/chamados-context";
+import { ChamadoType } from "../../context/chamados-context/types";
 
 import CardChamado from "../CardChamado";
 
 import { Container, Label, ListaDeChamados } from "./styles";
 
-
 interface CallsListProps {
-  handleOpenModal: (id: string) => void
+  handleOpenModal: (id: string) => void;
 }
 
-function CallsList({
-  handleOpenModal
-}:CallsListProps) {
+function CallsList({ handleOpenModal }: CallsListProps) {
   const { chamadosAtivos } = useChamadosContext();
 
   return (
@@ -25,7 +20,9 @@ function CallsList({
         data={chamadosAtivos}
         renderItem={({ item }) => {
           const { id, ...data } = item as ChamadoType;
-          return <CardChamado data={data} onPress={() => handleOpenModal(id)} />;
+          return (
+            <CardChamado data={data} onPress={() => handleOpenModal(id)} />
+          );
         }}
         keyExtractor={(item) => item?.id}
         showsHorizontalScrollIndicator={false}

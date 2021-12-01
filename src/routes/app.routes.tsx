@@ -17,7 +17,6 @@ export function AppRoutes() {
       <Screen name="Feed" component={FeedScreen} />
       <Screen name="Chamado" component={ChamadoScreen} />
       <Screen name="Report" component={ReportScreen} />
-      <Screen name="Help" component={ChamadoScreen} />
     </Navigator>
   );
 }

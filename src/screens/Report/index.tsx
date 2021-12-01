@@ -22,8 +22,8 @@ import { Checkbox } from "../../components/Form/CheckBox";
 import { ScrollView } from "react-native";
 
 interface FormData {
-  name: string;
-  amount: string;
+  tools: string;
+  problem: string;
 }
 
 const schema = Yup.object().shape({

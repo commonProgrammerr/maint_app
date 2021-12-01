@@ -12,9 +12,9 @@ import {
   ExitButton,
 } from "./style";
 import CallsList from "../../components/calls-list";
-import CallRequestModal from "../../components/modals/CallRequest";
+import { RepairRequestModal } from "../../components/modals/RepairRequest";
 import { FeedScreenProps } from "../../routes/types";
-import Button from "../../components/Button";
+import { StatusBar } from "expo-status-bar";
 
 export function FeedScreen({ navigation }: FeedScreenProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -32,6 +32,7 @@ export function FeedScreen({ navigation }: FeedScreenProps) {
 
   return (
     <Container>
+      <StatusBar style="light" />
       <Header>
         <UserWrampper>
           <UserInfo>
@@ -49,7 +50,7 @@ export function FeedScreen({ navigation }: FeedScreenProps) {
         </UserWrampper>
       </Header>
       <CallsList handleOpenModal={handleOpemModal} />
-      <CallRequestModal
+      <RepairRequestModal
         id={selectedId}
         visible={isModalOpen}
         onRequestClose={handleCloseModal}

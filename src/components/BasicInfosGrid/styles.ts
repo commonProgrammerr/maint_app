@@ -43,10 +43,11 @@ export const ElevatorIcon = styled(MaterialCommunityIcons).attrs({
   ${infoIconsStyle}
   margin-left: -3.5px;
 `;
-export const WCIcon = styled(MaterialCommunityIcons).attrs({
-  name: "human-male-female",
+export const WCIcon = styled(FontAwesome5).attrs({
+  name: "restroom",
 })`
   ${infoIconsStyle}
+  font-size: ${RFValue(16)}px;
   margin-left: -3.5px;
 `;
 export const Info = styled.Text`

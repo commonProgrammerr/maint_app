@@ -1,5 +1,4 @@
 import React from "react";
-import { Text } from "react-native";
 
 import { Container, ElevatorIcon, GridCollumn, GridItem, Info, InfoIcon, MapIcon, WCIcon } from "./styles";
 

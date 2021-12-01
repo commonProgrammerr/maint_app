@@ -1,5 +1,7 @@
+import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import BasicInfosGrid from "../../components/BasicInfosGrid";
+import { SuportRequestModal } from "../../components/modals/SuportRequest";
 import { useChamadosContext } from "../../context/chamados-context";
 import { ChamadosTypes } from "../../context/chamados-context/types";
 import { ChamdoScreenProps } from "../../routes/types";
@@ -25,7 +27,7 @@ export function ChamadoScreen({ route, navigation }: ChamdoScreenProps) {
   const { id } = route.params;
   const { getChamadoData } = useChamadosContext();
   const [dados, setDados] = useState(() => getChamadoData(id));
-  const [value, setValue] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   function handleGetTitle(type?: ChamadosTypes) {
     switch (type) {
@@ -42,6 +44,7 @@ export function ChamadoScreen({ route, navigation }: ChamdoScreenProps) {
 
   return (
     <Container>
+      <StatusBar style="light" />
       <Header type={dados?.type}>
         <AlertIcon />
         <Title>{handleGetTitle(dados?.type)}</Title>
@@ -59,15 +62,18 @@ export function ChamadoScreen({ route, navigation }: ChamdoScreenProps) {
         )}
       </DetailsWrapper>
       <ButtonsWrapper>
-        <EndButton onPress={() => navigation.navigate('Report', {
-          id
-        })}>
+        <EndButton onPress={() => navigation.navigate("Report", { id })}>
           <ButtonsText>Finalizar Chamado</ButtonsText>
         </EndButton>
-        <ReportButton>
-          <ButtonsText>Reportar problema</ButtonsText>
+        <ReportButton onPress={() => setIsModalOpen(true)}>
+          <ButtonsText>Solicitar Apio</ButtonsText>
         </ReportButton>
       </ButtonsWrapper>
+      <SuportRequestModal
+        id={id}
+        visible={isModalOpen}
+        onRequestClose={() => setIsModalOpen(false)}
+      />
     </Container>
   );
 }
