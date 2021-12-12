@@ -25,7 +25,7 @@ function BasicInfosGrid({ local, genero, piso, box }: BasicInfosGridProps) {
       <GridCollumn>
         <GridItem>
           <ElevatorIcon />
-          <Info>Piso {piso}</Info>
+          <Info>{piso}</Info>
         </GridItem>
         <GridItem>
           <InfoIcon name="toilet" />

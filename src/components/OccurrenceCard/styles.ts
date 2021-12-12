@@ -1,8 +1,8 @@
 import { RFValue } from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
 
-import { FontAwesome5 } from '@expo/vector-icons'
-import { ChamadosTypes } from '../../context/chamados-context/types';
+import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { OccurrencesType } from '../../context/chamados-context/types';
 
 export const Container = styled.TouchableOpacity`
   background-color: ${({ theme }) => theme.colors.shape};
@@ -24,18 +24,18 @@ export const Header = styled.Text`
 `
 
 interface ContentProps {
-  chamadoType: ChamadosTypes
+  type?: OccurrencesType
 }
 export const Content = styled.Text<ContentProps>`
   font-family: ${({ theme }) => theme.fonts.medium};
   font-size: ${RFValue(22)}px;
   margin-top: 6px;
-  color: ${({ theme, chamadoType }) => {
-    switch (chamadoType) {
-      case ChamadosTypes.ENTUPIMENTO:
+  color: ${({ theme, type }) => {
+    switch (type) {
+      case OccurrencesType.ENTUPIMENTO:
         return theme.colors.attention;
 
-      case ChamadosTypes.AJUDA:
+      case OccurrencesType.AJUDA:
         return theme.colors.secondary;
       default:
         return theme.colors.text + '90';
@@ -58,7 +58,9 @@ export const DescriptionContainer = styled.View`
   flex-direction: row;
 `
 
-export const Icon = styled(FontAwesome5)`
+export const Icon = styled(MaterialCommunityIcons).attrs({
+  name: 'elevator-passenger'
+})`
   font-size: ${RFValue(20)}px;
   color: ${({ theme }) => theme.colors.text};
   margin-right: 10px;

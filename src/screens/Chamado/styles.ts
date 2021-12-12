@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 import { FontAwesome5 } from '@expo/vector-icons'
-import { ChamadosTypes } from './../../context/chamados-context/types'
+import { OccurrencesType } from './../../context/chamados-context/types'
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
 import Button from '../../components/Button';
 
@@ -11,7 +11,7 @@ export const Container = styled.View`
   `;
 
 interface HeaderProps {
-  type?: ChamadosTypes;
+  type?: OccurrencesType;
 }
 
 export const Header = styled.View<HeaderProps>`
@@ -24,9 +24,9 @@ export const Header = styled.View<HeaderProps>`
   
   background-color: ${(props) => {
     switch (props.type) {
-      case ChamadosTypes.ENTUPIMENTO:
+      case OccurrencesType.ENTUPIMENTO:
         return props.theme.colors.attention;
-      case ChamadosTypes.AJUDA:
+      case OccurrencesType.AJUDA:
         return props.theme.colors.secondary;
       default:
         return props.theme.colors.text;

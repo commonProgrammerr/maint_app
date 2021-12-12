@@ -9,16 +9,17 @@ export const Container = styled.View`
   margin-top: 20px;
   margin-bottom: 50px;
   min-height: ${RFValue(70)}px;
-`;
+  `;
 
 export const GridCollumn = styled.View`
   align-items: flex-start;
   justify-content: space-around;
-`;
+  `;
 
 export const GridItem = styled.View`
   flex-direction: row;
   align-items: flex-start;
+  padding: 0 64px;
 `;
 
 const infoIconsStyle = css`
@@ -56,4 +57,6 @@ export const Info = styled.Text`
   color: ${(props) => props.theme.colors.title};
   line-height: ${RFValue(20)}px;
   align-items: flex-end;
+  /* max-width: 80%; */
+  text-align: center;
 `;

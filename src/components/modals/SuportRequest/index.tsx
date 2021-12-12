@@ -21,7 +21,7 @@ interface FormData {
 }
 
 const schema = Yup.object().shape({
-  apoio: Yup.array(Yup.string()),
+  apoio: Yup.array().length(1, "Escolha ao menos uma opção"),
   description: Yup.string()
     .required("A descrião é obrigátoria")
     .min(6, "Descrição muito curta"),

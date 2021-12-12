@@ -1,6 +1,5 @@
 import React from "react";
-import { useChamadosContext } from "../../context/chamados-context";
-import { ChamadosTypes } from "../../context/chamados-context/types";
+import { FeedItem  } from "../../services/api";
 
 import {
   Container,
@@ -13,13 +12,7 @@ import {
 } from "./styles";
 
 interface CardChamadoProps {
-  data: {
-    type: ChamadosTypes
-    piso: string;
-    local: string;
-    box: number;
-    time: string;
-  };
+  data?: FeedItem
   onPress?: () => void
 }
 
@@ -30,14 +23,13 @@ function CardChamado({
 
   return (
     <Container onPress={onPress}>
-      <Header>Piso {data.piso} </Header>
-      <Content chamadoType={data.type}>
-        {data.local}
+      <Content type={data?.type}>
+        {data?.local}
       </Content>
       <Footer>
         <DescriptionContainer>
-          <Icon name="toilet" />
-          <SubDescription>Box {data.box}</SubDescription>
+          <Icon />
+          <SubDescription>{data?.piso}</SubDescription>
         </DescriptionContainer>
       </Footer>
     </Container>

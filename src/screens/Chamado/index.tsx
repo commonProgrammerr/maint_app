@@ -2,8 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import BasicInfosGrid from "../../components/BasicInfosGrid";
 import { SuportRequestModal } from "../../components/modals/SuportRequest";
-import { useChamadosContext } from "../../context/chamados-context";
-import { ChamadosTypes } from "../../context/chamados-context/types";
+import { OccurrencesType } from "../../context/chamados-context/types";
 import { ChamdoScreenProps } from "../../routes/types";
 
 import {
@@ -20,45 +19,44 @@ import {
   Title,
 } from "./styles";
 
+function handleGetTitle(type?: OccurrencesType) {
+  switch (type) {
+    case OccurrencesType.ENTUPIMENTO:
+      return "Entupimento";
+
+    case OccurrencesType.AJUDA:
+      return "Requisição de Ajuda";
+
+    default:
+      return "??????????";
+  }
+}
+
 export function ChamadoScreen({ route, navigation }: ChamdoScreenProps) {
   const image_url =
     "https://www.melhoresdestinos.com.br/wp-content/uploads/2020/09/aeroporto-curitiba-banheiros.jpg";
 
-  const { id } = route.params;
-  const { getChamadoData } = useChamadosContext();
-  const [dados, setDados] = useState(() => getChamadoData(id));
+  const { id, data } = route.params;
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  function handleGetTitle(type?: ChamadosTypes) {
-    switch (type) {
-      case ChamadosTypes.ENTUPIMENTO:
-        return "Entupimento";
-
-      case ChamadosTypes.AJUDA:
-        return "Requisição de Ajuda";
-
-      default:
-        return "??????????";
-    }
-  }
 
   return (
     <Container>
       <StatusBar style="light" />
-      <Header type={dados?.type}>
+      <Header type={data?.type}>
         <AlertIcon />
-        <Title>{handleGetTitle(dados?.type)}</Title>
+        <Title>{handleGetTitle(data?.type)}</Title>
       </Header>
       <DetailsWrapper>
         {image_url && <PlaceImage source={{ uri: image_url }} />}
         <BasicInfosGrid
-          box={dados!.box}
-          piso={dados!.piso}
-          local={dados!.local}
-          genero={dados!.genero}
+          box={data?.box}
+          piso={data?.piso}
+          local={data?.local}
+          genero={data?.genero}
         />
-        {dados?.description && (
-          <LocalDescription>{dados.description}</LocalDescription>
+        {data?.description && (
+          <LocalDescription>{data?.description}</LocalDescription>
         )}
       </DetailsWrapper>
       <ButtonsWrapper>
@@ -69,6 +67,7 @@ export function ChamadoScreen({ route, navigation }: ChamdoScreenProps) {
           <ButtonsText>Solicitar Apio</ButtonsText>
         </ReportButton>
       </ButtonsWrapper>
+
       <SuportRequestModal
         id={id}
         visible={isModalOpen}

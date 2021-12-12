@@ -8,10 +8,12 @@ export default {
     secondary_light: lighten(0.3, '#ff872C'),
 
     sucess: '#12A454',
-    sucess_light: lighten(0.5, '#12A454'),
+    sucess_light: lighten(0.35, '#12A454'),
 
     attention: '#E83F5B',
-    attention_light: lighten(0.5, '#E83F5B'),
+    attention_light: lighten(0.15, '#E83F5B'),
+    
+    select_effect: '#3F8DE8',
 
     shape: '#fff',
     text: '#969cb2',

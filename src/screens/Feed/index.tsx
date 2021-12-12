@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { StatusBar } from "expo-status-bar";
+
 import {
   Container,
   Header,
@@ -11,24 +13,22 @@ import {
   Icon,
   ExitButton,
 } from "./style";
-import CallsList from "../../components/calls-list";
+import { FeedsList } from "../../components/FeedList";
 import { RepairRequestModal } from "../../components/modals/RepairRequest";
 import { FeedScreenProps } from "../../routes/types";
-import { StatusBar } from "expo-status-bar";
+import { useAuth } from "../../context/AuthContext";
 
 export function FeedScreen({ navigation }: FeedScreenProps) {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedId, setSelectedId] = useState("");
-
   function handleCloseModal() {
-    setIsModalOpen(false);
     setSelectedId("");
   }
 
   function handleOpemModal(id: string) {
-    setIsModalOpen(true);
     setSelectedId(id);
   }
+
+  const { user, logout } = useAuth();
 
   return (
     <Container>
@@ -41,18 +41,18 @@ export function FeedScreen({ navigation }: FeedScreenProps) {
             />
             <User>
               <UserGreeting>Olá,</UserGreeting>
-              <UserName>André</UserName>
+              <UserName>{user.name}</UserName>
             </User>
           </UserInfo>
-          <ExitButton>
+          <ExitButton onPress={logout}>
             <Icon name="log-out" />
           </ExitButton>
         </UserWrampper>
       </Header>
-      <CallsList handleOpenModal={handleOpemModal} />
+      <FeedsList handleOpenModal={handleOpemModal} />
       <RepairRequestModal
         id={selectedId}
-        visible={isModalOpen}
+        visible={!!selectedId}
         onRequestClose={handleCloseModal}
       />
     </Container>

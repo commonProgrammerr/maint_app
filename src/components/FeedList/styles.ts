@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
-import { ChamadoType } from '../../context/chamados-context/types';
 import { FlatListProps } from "react-native";
+import { FeedItem } from '../../services/api';
 
 export const Container = styled.View`
   flex: 1;
@@ -9,7 +9,7 @@ export const Container = styled.View`
   width: 100%;
 `;
 
-export const ListaDeChamados = styled.FlatList<FlatListProps<ChamadoType>>`
+export const ListaDeChamados = styled.FlatList<FlatListProps<FeedItem>>`
   width: 100%;
   margin: 16px 0;
   

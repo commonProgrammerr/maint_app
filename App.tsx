@@ -9,10 +9,11 @@ import {
 } from "@expo-google-fonts/poppins";
 
 import defaultTheme from "./src/global/styles/theme";
-import { ChamadosContextProvider } from "./src/context/chamados-context";
-import { NavigationContainer } from "@react-navigation/native";
-import { AppRoutes } from "./src/routes/app.routes";
+import { OccurrencesProvider } from "./src/context/chamados-context";
+import { Routes } from "./src/routes";
 import { StatusBar } from "expo-status-bar";
+import { AuthProvider } from "./src/context/AuthContext";
+import { SocketProvider } from "./src/context/SocketContext";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -25,12 +26,14 @@ export default function App() {
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <ChamadosContextProvider>
-        <StatusBar style="light" />
-        <NavigationContainer>
-          <AppRoutes />
-        </NavigationContainer>
-      </ChamadosContextProvider>
+      <AuthProvider>
+        <SocketProvider>
+          <OccurrencesProvider>
+            <StatusBar style="light" />
+            <Routes />
+          </OccurrencesProvider>
+        </SocketProvider>
+      </AuthProvider>
     </ThemeProvider>
   );
 }

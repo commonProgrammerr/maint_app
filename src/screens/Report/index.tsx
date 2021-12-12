@@ -17,6 +17,7 @@ import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 
 import { useForm } from "react-hook-form";
+import { useAuth } from "../../context/AuthContext";
 import { getToolsList } from "../../utils/getToolsList";
 import { Checkbox } from "../../components/Form/CheckBox";
 import { ScrollView } from "react-native";
@@ -27,13 +28,15 @@ interface FormData {
 }
 
 const schema = Yup.object().shape({
-  tools: Yup.string().required("Defina a ferramenta utilizada para solução do problema"),
-  problem: Yup.string()
-    .required("Defina o problema apresentado"),
+  tools: Yup.string().required(
+    "Defina a ferramenta utilizada para solução do problema"
+  ),
+  type: Yup.string().required("Defina o problema apresentado"),
 });
 
-export function ReportScreen({ navigation }: ReportScreenProps) {
+export function ReportScreen({ route, navigation }: ReportScreenProps) {
   const ferramentas = getToolsList();
+  const { user } = useAuth();
 
   const {
     control,
@@ -47,7 +50,9 @@ export function ReportScreen({ navigation }: ReportScreenProps) {
   function handleSendReport(form: FormData) {
     console.log({
       ...form,
-      date: (new Date()).toISOString() 
+      date: new Date().toISOString(),
+      oc_id: route.params.id,
+      usr_id: user.id,
     });
   }
 
@@ -57,11 +62,11 @@ export function ReportScreen({ navigation }: ReportScreenProps) {
       <Header bg="sucess">
         <Title>Relátorio</Title>
       </Header>
-      <ScrollView style={{ flex: 1}}>
+      <ScrollView style={{ flex: 1 }}>
         <Form>
           <Checkbox
             control={control}
-            name="problem"
+            name="type"
             label="Qual o problema apresentado?"
             outros
             errors={errors}

@@ -1,11 +1,11 @@
+import { SearchDTO } from './../services/api'
 import { NativeStackScreenProps } from '@react-navigation/native-stack'
 
 
 export type RootStackParamList = {
   Feed: undefined;
-  Chamado: { id: string };
+  Chamado: { id: string, data: SearchDTO };
   Report: { id: string };
-  Help: { id: string };
 };
 
 export type FeedScreenProps = NativeStackScreenProps<
