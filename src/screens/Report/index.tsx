@@ -21,6 +21,7 @@ import { useAuth } from "../../context/AuthContext";
 import { getToolsList } from "../../utils/getToolsList";
 import { Checkbox } from "../../components/Form/CheckBox";
 import { ScrollView } from "react-native";
+import { api } from "../../services/api";
 
 interface FormData {
   tools: string;
@@ -47,13 +48,21 @@ export function ReportScreen({ route, navigation }: ReportScreenProps) {
     resolver: yupResolver(schema),
   });
 
-  function handleSendReport(form: FormData) {
-    console.log({
-      ...form,
-      date: new Date().toISOString(),
-      oc_id: route.params.id,
-      usr_id: user.id,
-    });
+  async function handleSendReport(form: FormData) {
+    try {
+      const report = {
+        ...form,
+        date: new Date().toISOString(),
+        oc_id: route.params.id,
+        usr_id: user.id,
+      };
+  
+      await api.post('/suport', report)
+      navigation.popToTop()
+      
+    } catch(error) {
+      alert('Não foi possivel enviar o relátorio...')
+    }
   }
 
   return (

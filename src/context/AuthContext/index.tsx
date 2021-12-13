@@ -10,6 +10,7 @@ import React, {
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 import { api, UserAuthDTO } from "../../services/api";
+import genId from "../../utils/genID";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -48,7 +49,11 @@ async function handleAuth(data: AuthSubmitData) {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<User>({} as User);
+  const [user, setUser] = useState<User>({
+    id: genId(),
+    name: 'Admin',
+    grupe_id: genId()
+  } as User);
 
   const handleLogin = useCallback<AuthContextType["login"]>(async (data) => {
     try {

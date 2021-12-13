@@ -1,5 +1,5 @@
+import React, { useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
-import React from "react";
 import { useForm } from "react-hook-form";
 import { object, string } from "yup";
 import { InputForm } from "../../components/Form/Input";
@@ -32,11 +32,21 @@ export function AuthScreen() {
     resolver: yupResolver(schema),
   });
 
+  const [loading, setLoading] = useState(false)
+
   const { login } = useAuth();
+
+  async function handleLogin(data: any) {
+    if(!loading){
+      setLoading(true)
+      await login(data)
+      setLoading(false)
+    }
+  }
 
   return (
     <Container>
-      <Title>Login</Title>
+      <Title>{ loading ? 'Entrando...' : 'Login'}</Title>
       <InputForm
         style={{ marginBottom: 24 }}
         name="login"
@@ -51,7 +61,7 @@ export function AuthScreen() {
         error={errors}
         placeholder="Senha"
       />
-      <ButtonContainer onPress={handleSubmit(login)}>
+      <ButtonContainer onPress={handleSubmit(handleLogin)}>
         <SubmitButton>
           <ButtonTetx>Entrar</ButtonTetx>
           <LoginIcon />

@@ -41,7 +41,7 @@ export function FeedScreen({ navigation }: FeedScreenProps) {
             />
             <User>
               <UserGreeting>Olá,</UserGreeting>
-              <UserName>{user.name}</UserName>
+              <UserName>{user.name} Do val</UserName>
             </User>
           </UserInfo>
           <ExitButton onPress={logout}>
@@ -49,7 +49,7 @@ export function FeedScreen({ navigation }: FeedScreenProps) {
           </ExitButton>
         </UserWrampper>
       </Header>
-      <FeedsList handleOpenModal={handleOpemModal} />
+      {/* <FeedsList handleOpenModal={handleOpemModal} /> */}
       <RepairRequestModal
         id={selectedId}
         visible={!!selectedId}
