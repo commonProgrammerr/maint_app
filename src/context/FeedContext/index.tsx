@@ -54,7 +54,7 @@ async function schedulePushNotification(data: FeedItem) {
       body: `${OccurrencesType2String(data.type)} em ${data.local}`,
       data: {},
     },
-    trigger: { seconds: 2, channelId: "new-ocurrences" },
+    trigger: { seconds: 1, channelId: "new-ocurrences" },
   });
 }
 
@@ -62,7 +62,8 @@ export function FeedProvider({ children }: FeedProviderProps) {
   const { loadFeed } = useOccurrencesContext();
   const feedPage = useAsync(async () => (await loadFeed())?.data, []);
   const feed = feedPage.result?.feed || ([] as FeedItem[]);
-  
+  const [news, setNews] = useState([] as FeedItem[])
+
   useEffect(() => console.log('render', 'feed'))
   
   useSocket((io) => {
@@ -78,13 +79,7 @@ export function FeedProvider({ children }: FeedProviderProps) {
     console.log("@event:new\n", data.id);
     if (!feed.find((item) => item.id === data.id)) {
       schedulePushNotification(data);
-      feedPage.set({
-        ...feedPage,
-        result: {
-          page: feedPage.result?.page,
-          feed: [data, ...feed],
-        },
-      });
+      setNews([data, ...news])
     }
   }
   function handleRemoveItem(data: FeedItem) {
@@ -96,12 +91,14 @@ export function FeedProvider({ children }: FeedProviderProps) {
           page: feedPage.result?.page,
           feed: feed.filter((item) => item.id !== data.id),
         },
+        loading: false
       });
     }
   }
 
   async function handleReloadFeed() {
     feedPage.reset();
+    setNews([])
     await feedPage.execute()
   }
 
@@ -111,7 +108,7 @@ export function FeedProvider({ children }: FeedProviderProps) {
   return (
     <feedContext.Provider
       value={{
-        feed,
+        feed: [...news, ...feed],
         loading: feedPage.loading,
         error: feedPage.error,
         loadNextFeedPage: handleLoadNextPage,
