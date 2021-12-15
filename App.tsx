@@ -14,6 +14,7 @@ import { Routes } from "./src/routes";
 import { StatusBar } from "expo-status-bar";
 import { AuthProvider } from "./src/context/AuthContext";
 import { SocketProvider } from "./src/context/SocketContext";
+import { FeedProvider } from "./src/context/FeedContext";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -29,8 +30,10 @@ export default function App() {
       <AuthProvider>
         <SocketProvider>
           <OccurrencesProvider>
-            <StatusBar style="light" />
-            <Routes />
+            <FeedProvider>
+              <StatusBar style="light" />
+              <Routes />
+            </FeedProvider>
           </OccurrencesProvider>
         </SocketProvider>
       </AuthProvider>

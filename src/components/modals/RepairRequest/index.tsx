@@ -51,28 +51,14 @@ export function RepairRequestModal({
   onRequestClose,
 }: RepairRequestModalProps) {
   const { getOccurenceData } = useOccurrencesContext();
-  const socketRef = useRef<Socket | undefined>();
   const navigation = useNavigation();
 
-  // useSocket((sk) => {
-  //   socketRef.current = sk;
-  // });
 
   const { loading, result } = useAsyncMemo(
     async () => {
-      const data = await getOccurenceData(id);
-      await delay(10000);
-      return data;
+      return await getOccurenceData(id);
     },
     [id]
-    // {
-    //   effect(key, ref) {
-    //     socketRef.current?.on("update-feed:remove", ({ id }) => {
-    //       const { data } = ref[key];
-    //       if (data.id === id) delete ref[key];
-    //     });
-    //   },
-    // }
   );
 
 
@@ -110,7 +96,7 @@ export function RepairRequestModal({
           <Header>
             <TimeContainer>
               <TimeIcon />
-              <TimeInfo>{data && getTimeString(data.date)}</TimeInfo>
+              <TimeInfo>{data && getTimeString(data.created_at)}</TimeInfo>
             </TimeContainer>
             <StatisWrapper type={data?.type}>
               <AlertIcon />
@@ -127,7 +113,7 @@ export function RepairRequestModal({
           </InfoItem>
           <InfoItem>
             <WCIcon />
-            <Info>masculino</Info>
+            <Info>{data?.banheiro}</Info>
           </InfoItem>
           <InfoItem>
             <InfoIcon name="toilet" />

@@ -3,6 +3,7 @@ import React, {
   useContext,
   ReactNode,
   useCallback,
+  useEffect,
 } from "react";
 import axios, { AxiosResponse } from "axios";
 import { api, FeedDTO, SearchDTO, SOCKET_BASE_URL } from "../../services/api";
@@ -22,17 +23,18 @@ export function OccurrencesProvider({ children }: ProviderProps) {
   const { user } = useAuth();
 
   const handleLoadFeed = async (page = 1) => {
-    return api.post<FeedDTO>("/feed/", {
-      usr_id: "1",
-      pag: page,
+    return api.post<FeedDTO>("/events/feed/", {
+      page,
+      zone_id: user.grupe_id,
     });
   };
 
   const getOccurenceData = async (id: string) =>
-    api.post<SearchDTO>("/search/", {
-      // usr_id: user.id,
-      oc_id: id,
+    api.post<SearchDTO>("/events/search/", {
+      id,
     });
+
+  useEffect(() => console.log("render", "chamados"));
 
   return (
     <OccurrencesContext.Provider

@@ -21,11 +21,11 @@ import {
 
 function handleGetTitle(type?: OccurrencesType) {
   switch (type) {
-    case OccurrencesType.ENTUPIMENTO:
-      return "Entupimento";
+    case OccurrencesType.REPARO:
+      return "Reparo";
 
-    case OccurrencesType.AJUDA:
-      return "Requisição de Ajuda";
+    case OccurrencesType.SUPORT:
+      return "Suporte";
 
     default:
       return "??????????";
@@ -53,7 +53,7 @@ export function ChamadoScreen({ route, navigation }: ChamdoScreenProps) {
           box={data?.box}
           piso={data?.piso}
           local={data?.local}
-          genero={data?.genero}
+          genero={data?.banheiro}
         />
         {data?.description && (
           <LocalDescription>{data?.description}</LocalDescription>
@@ -71,6 +71,7 @@ export function ChamadoScreen({ route, navigation }: ChamdoScreenProps) {
       <SuportRequestModal
         id={id}
         visible={isModalOpen}
+        data={data}
         onRequestClose={() => setIsModalOpen(false)}
       />
     </Container>

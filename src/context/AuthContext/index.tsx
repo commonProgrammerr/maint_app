@@ -24,7 +24,7 @@ interface User {
 }
 
 type AuthSubmitData = {
-  email: string;
+  login: string;
   password: string;
 };
 
@@ -39,8 +39,8 @@ const userStorageKey = "@miimo_expo:user";
 
 async function handleAuth(data: AuthSubmitData) {
   console.log(data);
-  const response = await api.post<UserAuthDTO>("/auth", {
-    usr_log: data.email,
+  const response = await api.post<UserAuthDTO>("/auth/", {
+    usr_log: data.login,
     usr_pass: data.password,
   });
 
@@ -49,11 +49,7 @@ async function handleAuth(data: AuthSubmitData) {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  const [user, setUser] = useState<User>({
-    id: genId(),
-    name: 'Admin',
-    grupe_id: genId()
-  } as User);
+  const [user, setUser] = useState<User>({} as User);
 
   const handleLogin = useCallback<AuthContextType["login"]>(async (data) => {
     try {
@@ -75,6 +71,18 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }, []);
 
+  async function handleLogout() {
+    try {
+
+      await AsyncStorage.setItem(userStorageKey, JSON.stringify({} as User));
+      setUser({} as User);
+    } catch (error) {
+      Alert.alert("Não foi possivel fazer o logout!");
+      console.error(error);
+      throw error as Error;
+    }
+  }
+
   useEffect(() => {
     async function loadUserStorageDate() {
       const userStoraged = await AsyncStorage.getItem(userStorageKey);
@@ -88,12 +96,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
     loadUserStorageDate();
   }, []);
 
+  useEffect(() => console.log("render", "auth"));
+
   return (
     <AuthContext.Provider
       value={{
         user,
         login: handleLogin,
-        logout: () => setUser({} as User),
+        logout: handleLogout,
       }}
     >
       {children}
@@ -109,4 +119,8 @@ export function useAuth() {
   }
 
   return context;
+}
+
+export function useAuthUser() {
+  return useAuth().user;
 }

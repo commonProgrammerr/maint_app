@@ -24,9 +24,9 @@ export const Header = styled.View<HeaderProps>`
   
   background-color: ${(props) => {
     switch (props.type) {
-      case OccurrencesType.ENTUPIMENTO:
+      case OccurrencesType.REPARO:
         return props.theme.colors.attention;
-      case OccurrencesType.AJUDA:
+      case OccurrencesType.SUPORT:
         return props.theme.colors.secondary;
       default:
         return props.theme.colors.text;

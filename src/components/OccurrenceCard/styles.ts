@@ -32,10 +32,10 @@ export const Content = styled.Text<ContentProps>`
   margin-top: 6px;
   color: ${({ theme, type }) => {
     switch (type) {
-      case OccurrencesType.ENTUPIMENTO:
+      case OccurrencesType.REPARO:
         return theme.colors.attention;
 
-      case OccurrencesType.AJUDA:
+      case OccurrencesType.SUPORT:
         return theme.colors.secondary;
       default:
         return theme.colors.text + '90';

@@ -53,14 +53,15 @@ export function ReportScreen({ route, navigation }: ReportScreenProps) {
       const report = {
         ...form,
         date: new Date().toISOString(),
-        oc_id: route.params.id,
+        id: route.params.id,
         usr_id: user.id,
       };
   
-      await api.post('/suport', report)
+      await api.post('/events/close', report)
       navigation.popToTop()
       
     } catch(error) {
+      console.log(error)
       alert('Não foi possivel enviar o relátorio...')
     }
   }

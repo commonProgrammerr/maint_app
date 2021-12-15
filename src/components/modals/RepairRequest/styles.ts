@@ -50,11 +50,11 @@ export const StatisWrapper = styled.View<StatusProps>`
   justify-content: center;
   ${(props) => {
     switch (props.type) {
-      case OccurrencesType.ENTUPIMENTO:
+      case OccurrencesType.REPARO:
         return css`
           background-color: ${props.theme.colors.attention};
         `;
-      case OccurrencesType.AJUDA:
+      case OccurrencesType.SUPORT:
         return css`
           background-color: ${props.theme.colors.secondary};
         `;

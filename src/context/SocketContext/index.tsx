@@ -8,6 +8,7 @@ import React, {
 
 import io, { Socket } from "socket.io-client";
 import { SOCKET_BASE_URL } from "../../services/api";
+import { useAuth } from "../AuthContext";
 
 interface SocketContext {
   socketIO: () => Socket;
@@ -20,23 +21,24 @@ type Props = { children: ReactNode };
 
 export function SocketProvider({ children }: Props) {
   const socket = useRef(io(SOCKET_BASE_URL));
-
+  const { user } = useAuth();
+  useEffect(() => console.log("render", "chamados"));
   return (
     <socketContext.Provider
-      value={{
-        socketIO: () => socket.current,
-        async connect(url) {
-          try {
-            if (socket.current) socket.current.disconnect();
-            socket.current = io(url);
-            return Promise.resolve();
-          } catch (err) {
-            return Promise.reject(err);
-          }
-        },
-        async disconnect() {
-          try {
-            if (socket.current) {
+    value={{
+      socketIO: () => socket.current,
+      async connect(url) {
+        try {
+          if (socket.current) socket.current.disconnect();
+          socket.current = io(`${url}/${user.grupe_id}`);
+          return Promise.resolve();
+        } catch (err) {
+          return Promise.reject(err);
+        }
+      },
+      async disconnect() {
+        try {
+          if (socket.current) {
               socket.current.disconnect();
             }
             return Promise.resolve();
@@ -45,7 +47,7 @@ export function SocketProvider({ children }: Props) {
           }
         },
       }}
-    >
+      >
       {children}
     </socketContext.Provider>
   );
@@ -53,15 +55,14 @@ export function SocketProvider({ children }: Props) {
 
 export function useSocket(fn?: (io: Socket) => void) {
   const context = useContext(socketContext);
-
+  
   if (!context) {
     throw new Error("This hook, must be used inside a 'SocketProvider'!");
   }
-
-
+  
   useEffect(() => {
     const cllbck = fn?.(context.socketIO());
-
+    
     if (cllbck) {
       return cllbck;
     }

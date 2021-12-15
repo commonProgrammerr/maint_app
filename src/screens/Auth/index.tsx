@@ -15,8 +15,7 @@ import {
 } from "./styles";
 
 const schema = object().shape({
-  login: string()
-    .required("Insira seu login para prosseguir"),
+  login: string().required("Insira seu login para prosseguir"),
   password: string()
     .min(4, "Senha muito curta")
     .required("Insira sua senha para prosseguir"),
@@ -32,21 +31,24 @@ export function AuthScreen() {
     resolver: yupResolver(schema),
   });
 
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
 
   const { login } = useAuth();
 
   async function handleLogin(data: any) {
-    if(!loading){
-      setLoading(true)
-      await login(data)
-      setLoading(false)
+    if (!loading) {
+      try {
+        setLoading(true);
+        await login(data);
+      } finally {
+        setLoading(false);
+      }
     }
   }
 
   return (
     <Container>
-      <Title>{ loading ? 'Entrando...' : 'Login'}</Title>
+      <Title>{loading ? "Entrando..." : "Login"}</Title>
       <InputForm
         style={{ marginBottom: 24 }}
         name="login"
