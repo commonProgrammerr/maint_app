@@ -12,8 +12,8 @@ import * as Notifications from "expo-notifications";
 
 import { api, FeedItem, FeedDTO, SOCKET_BASE_URL } from "../../services/api";
 import { useSocket } from "../../context/SocketContext";
-import { useOccurrencesContext } from "../../context/chamados-context";
-import { OccurrencesType2String } from "../chamados-context/types";
+import { OccurrencesType2String } from "../../utils/occurrences";
+import { useAuthUser } from "../AuthContext";
 
 interface FeedProviderProps {
   children: ReactNode;
@@ -40,14 +40,20 @@ Notifications.setNotificationHandler({
 
 (async () => {
   await Notifications.setNotificationChannelAsync("new-ocurrences", {
-    name: "Maint Ocurrences",
+    name: "Nova Ocorrencia",
     importance: Notifications.AndroidImportance.HIGH,
-    sound: "default",
+    sound: "notification-sound.wav",
     vibrationPattern: [0, 200, 200, 100, 200, 200, 100, 60, 30],
+    lightColor: "#F00"
+  });
+  await Notifications.setNotificationChannelAsync("close-ocurrences", {
+    name: "Ocorrencia encerrada",
+    sound: "none",
+    importance: Notifications.AndroidImportance.LOW,
   });
 })();
 
-async function schedulePushNotification(data: FeedItem) {
+async function scheduleNewEventPushNotification(data: FeedItem) {
   await Notifications.scheduleNotificationAsync({
     content: {
       title: "Nova ocorrencia! ⏰",
@@ -57,15 +63,38 @@ async function schedulePushNotification(data: FeedItem) {
     trigger: { seconds: 1, channelId: "new-ocurrences" },
   });
 }
+async function scheduleCloseEventPushNotification() {
+  await Notifications.scheduleNotificationAsync({
+    content: {
+      title: "Ocorrencia fechada!",
+      sound: false,
+      body: "Ocorrencia fechada! O relátorio enviado está em analise.",
+      data: {},
+    },
+    trigger: { seconds: 1, channelId: "close-ocurrences" },
+  });
+}
 
 export function FeedProvider({ children }: FeedProviderProps) {
-  const { loadFeed } = useOccurrencesContext();
-  const feedPage = useAsync(async () => (await loadFeed())?.data, []);
-  const feed = feedPage.result?.feed || ([] as FeedItem[]);
-  const [news, setNews] = useState([] as FeedItem[])
+  const { grupe_id } = useAuthUser();
+  const page = useAsync(async () => {
+    return (
+      await api.post<FeedDTO>("/events/feed/", {
+        zone_id: grupe_id,
+      })
+    ).data;
+  }, []);
 
-  useEffect(() => console.log('render', 'feed'))
-  
+  const feedPage = page.result?.feed || ([] as FeedItem[]);
+  const [feed, setFeed] = useState([] as FeedItem[]);
+
+  useEffect(() => console.log("render", "feed"));
+  useEffect(() => {
+    if (page.loading) return;
+
+    setFeed([...feed, ...feedPage]);
+  }, [page.loading]);
+
   useSocket((io) => {
     io?.on("@event:new", handleAddItem);
     io?.on("@event:close", handleRemoveItem);
@@ -78,39 +107,31 @@ export function FeedProvider({ children }: FeedProviderProps) {
   function handleAddItem(data: FeedItem) {
     console.log("@event:new\n", data.id);
     if (!feed.find((item) => item.id === data.id)) {
-      schedulePushNotification(data);
-      setNews([data, ...news])
+      scheduleNewEventPushNotification(data);
+      setFeed((last) => [data, ...last]);
     }
   }
-  function handleRemoveItem(data: FeedItem) {
+  const handleRemoveItem = useCallback((data: FeedItem) => {
+    scheduleCloseEventPushNotification();
     console.log("@event:close\n", data.id);
-    if (!feed.find((item) => item.id === data.id)) {
-      feedPage.set({
-        ...feedPage,
-        result: {
-          page: feedPage.result?.page,
-          feed: feed.filter((item) => item.id !== data.id),
-        },
-        loading: false
-      });
-    }
-  }
+    setFeed((feed) => feed.filter((item) => item.id !== data.id));
+  }, []);
 
-  async function handleReloadFeed() {
-    feedPage.reset();
-    setNews([])
-    await feedPage.execute()
-  }
+  const handleReloadFeed = useCallback(async () => {
+    setFeed([]);
+    await page.execute();
+  }, []);
 
-  async function handleLoadNextPage() {
-    await feedPage.execute();
-  }
+  const handleLoadNextPage = useCallback(async () => {
+    await page.execute();
+  }, []);
+
   return (
     <feedContext.Provider
       value={{
-        feed: [...news, ...feed],
-        loading: feedPage.loading,
-        error: feedPage.error,
+        feed: feed,
+        loading: page.loading,
+        error: page.error,
         loadNextFeedPage: handleLoadNextPage,
         reloadFeed: handleReloadFeed,
       }}

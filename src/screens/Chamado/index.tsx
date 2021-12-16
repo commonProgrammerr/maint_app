@@ -2,7 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import BasicInfosGrid from "../../components/BasicInfosGrid";
 import { SuportRequestModal } from "../../components/modals/SuportRequest";
-import { OccurrencesType } from "../../context/chamados-context/types";
+import { OccurrencesType } from "../../utils/occurrences";
 import { ChamdoScreenProps } from "../../routes/types";
 
 import {

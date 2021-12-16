@@ -55,10 +55,11 @@ export function ReportScreen({ route, navigation }: ReportScreenProps) {
         date: new Date().toISOString(),
         id: route.params.id,
         usr_id: user.id,
+        zone_id: user.grupe_id
       };
-  
-      await api.post('/events/close', report)
+      
       navigation.popToTop()
+      await api.post('/events/close', report)
       
     } catch(error) {
       console.log(error)

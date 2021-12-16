@@ -9,7 +9,6 @@ import {
 } from "@expo-google-fonts/poppins";
 
 import defaultTheme from "./src/global/styles/theme";
-import { OccurrencesProvider } from "./src/context/chamados-context";
 import { Routes } from "./src/routes";
 import { StatusBar } from "expo-status-bar";
 import { AuthProvider } from "./src/context/AuthContext";
@@ -28,14 +27,8 @@ export default function App() {
   return (
     <ThemeProvider theme={defaultTheme}>
       <AuthProvider>
-        <SocketProvider>
-          <OccurrencesProvider>
-            <FeedProvider>
-              <StatusBar style="light" />
-              <Routes />
-            </FeedProvider>
-          </OccurrencesProvider>
-        </SocketProvider>
+        <StatusBar style="light" />
+        <Routes />
       </AuthProvider>
     </ThemeProvider>
   );

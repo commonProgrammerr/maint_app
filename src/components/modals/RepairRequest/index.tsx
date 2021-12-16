@@ -1,8 +1,7 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect } from "react";
 import Modal from "react-native-modal";
 
-import { useOccurrencesContext } from "../../../context/chamados-context";
-import { OccurrencesType } from "../../../context/chamados-context/types";
+import { getOccurenceData, OccurrencesType } from "../../../utils/occurrences";
 import Button from "../../Button";
 
 import {
@@ -23,7 +22,6 @@ import {
 } from "./styles";
 import { useNavigation } from "../../../context/use-navigation";
 import { getTimeString } from "../../../utils/getTimeString";
-import { useAsync } from "react-async-hook";
 import { LoadIndicator } from "../../LoadIndicator";
 import {
   ElevatorIcon,
@@ -32,10 +30,7 @@ import {
   MapIcon,
   WCIcon,
 } from "../../BasicInfosGrid/styles";
-import { SearchDTO } from "../../../services/api";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
-import { Socket } from "socket.io-client";
-import { useSocket } from "../../../context/SocketContext";
 
 interface RepairRequestModalProps {
   visible: boolean;
@@ -50,7 +45,6 @@ export function RepairRequestModal({
   visible,
   onRequestClose,
 }: RepairRequestModalProps) {
-  const { getOccurenceData } = useOccurrencesContext();
   const navigation = useNavigation();
 
 

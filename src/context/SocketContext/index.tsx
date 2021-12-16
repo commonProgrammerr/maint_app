@@ -22,7 +22,7 @@ type Props = { children: ReactNode };
 export function SocketProvider({ children }: Props) {
   const socket = useRef(io(SOCKET_BASE_URL));
   const { user } = useAuth();
-  useEffect(() => console.log("render", "chamados"));
+  useEffect(() => console.log("render", "socket"));
   return (
     <socketContext.Provider
     value={{
