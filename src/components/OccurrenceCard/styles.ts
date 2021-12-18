@@ -2,7 +2,7 @@ import { RFValue } from 'react-native-responsive-fontsize';
 import styled from 'styled-components/native';
 
 import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { OccurrencesType } from '../../context/chamados-context/types';
+import { OccurrencesType } from '../../utils/occurrences';
 
 export const Container = styled.TouchableOpacity`
   background-color: ${({ theme }) => theme.colors.shape};

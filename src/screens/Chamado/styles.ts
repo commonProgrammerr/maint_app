@@ -1,6 +1,6 @@
 import styled from 'styled-components/native';
 import { FontAwesome5 } from '@expo/vector-icons'
-import { OccurrencesType } from './../../context/chamados-context/types'
+import { OccurrencesType } from './../../utils/occurrences'
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
 import Button from '../../components/Button';
 

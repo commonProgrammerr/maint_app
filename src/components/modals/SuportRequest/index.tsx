@@ -9,7 +9,7 @@ import { ButtonText, Container, FormContainer, Textarea } from "./styles";
 import { useForm } from "react-hook-form";
 import { MultiCheckbox } from "../../Form/MultiCheckBox";
 import { api, SearchDTO } from "../../../services/api";
-import { OccurrencesType } from "../../../context/chamados-context/types";
+import { OccurrencesType } from "../../../utils/occurrences";
 import { useAuth } from "../../../context/AuthContext";
 
 interface CallRequestProps {

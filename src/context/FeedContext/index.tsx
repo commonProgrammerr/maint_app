@@ -43,8 +43,8 @@ Notifications.setNotificationHandler({
     name: "Nova Ocorrencia",
     importance: Notifications.AndroidImportance.HIGH,
     sound: "notification-sound.wav",
-    vibrationPattern: [0, 200, 200, 100, 200, 200, 100, 60, 30],
-    lightColor: "#F00"
+    vibrationPattern: [0, 200, 200, 100],
+    
   });
   await Notifications.setNotificationChannelAsync("close-ocurrences", {
     name: "Ocorrencia encerrada",

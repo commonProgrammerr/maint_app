@@ -3,7 +3,7 @@ import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
 import { FontAwesome5 } from "@expo/vector-icons";
 
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { OccurrencesType } from "../../../context/chamados-context/types";
+import { OccurrencesType } from "../../../utils/occurrences";
 
 export const Container = styled(GestureHandlerRootView)`
   background-color: white;
