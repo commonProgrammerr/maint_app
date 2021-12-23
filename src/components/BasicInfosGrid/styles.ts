@@ -5,21 +5,24 @@ import styled, { css } from 'styled-components/native'
 
 export const Container = styled.View`
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: flex-start;
+  flex: 1;
   margin-top: 20px;
   margin-bottom: 50px;
   min-height: ${RFValue(70)}px;
+  width: 100%;
   `;
 
 export const GridCollumn = styled.View`
   align-items: flex-start;
-  justify-content: space-around;
+  /* justify-content: space-around; */
   `;
 
 export const GridItem = styled.View`
   flex-direction: row;
   align-items: flex-start;
-  padding: 0 64px;
+  width: 100%;
+  padding: 2px 6px;
 `;
 
 const infoIconsStyle = css`

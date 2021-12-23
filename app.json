@@ -1,8 +1,9 @@
 {
   "expo": {
-    "name": "miimo_expo",
-    "slug": "miimo_expo",
+    "name": "MaintApp",
+    "slug": "maint-app",
     "version": "1.0.0",
+    "icon": "./local/assets/icon.png",
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -10,14 +11,17 @@
       [
         "expo-notifications",
         {
-          "icon": "./local/assets/notification-icon.png",
+          "icon": "./local/assets/icon.png",
           "sounds": [
             "./local/assets/notification-sound.wav",
             "./local/assets/notification-sound-other.wav"
           ]
         }
       ]
-    ]
+    ],
+    "android": {
+      "package": "com.maint.app"
+    }
   },
   "name": "miimo_expo"
 }

@@ -11,6 +11,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 import { api, UserAuthDTO } from "../../services/api";
 import genId from "../../utils/genID";
+import axios from "axios";
 
 interface AuthProviderProps {
   children: ReactNode;
@@ -39,7 +40,8 @@ const userStorageKey = "@miimo_expo:user";
 
 async function handleAuth(data: AuthSubmitData) {
   console.log(data);
-  const response = await api.post<UserAuthDTO>("/auth/", {
+  const url = 'http://miimo.a4rsolucoes.com.br/apis/auth/'
+  const response = await axios.post<UserAuthDTO>(url, {
     usr_log: data.login,
     usr_pass: data.password,
   });
@@ -59,9 +61,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
         id: userDTO.usr_id,
         name: userDTO.usr_name,
         photo: undefined,
-        grupe_id: userDTO.usr_grupo,
+        grupe_id: encodeURI(userDTO.usr_empresa).toLowerCase(),
       };
-
+      console.log(userInfo)
       setUser(userInfo);
       await AsyncStorage.setItem(userStorageKey, JSON.stringify(userInfo));
     } catch (error) {

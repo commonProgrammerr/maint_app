@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Image } from "react-native";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { object, string } from "yup";
@@ -13,6 +14,7 @@ import {
   SubmitButton,
   Title,
 } from "./styles";
+import { imageB64 } from "./image";
 
 const schema = object().shape({
   login: string().required("Insira seu login para prosseguir"),
@@ -48,7 +50,14 @@ export function AuthScreen() {
 
   return (
     <Container>
-      <Title>{loading ? "Entrando..." : "Login"}</Title>
+      {loading ? (
+        <Title>Entrando...</Title>
+      ) : (
+        <Image
+          style={{ width: "100%", height: 140, marginBottom: 24 }}
+          source={{ uri: imageB64 }}
+        />
+      )}
       <InputForm
         style={{ marginBottom: 24 }}
         name="login"

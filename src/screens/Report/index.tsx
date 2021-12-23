@@ -50,17 +50,16 @@ export function ReportScreen({ route, navigation }: ReportScreenProps) {
 
   async function handleSendReport(form: FormData) {
     try {
+      console.log(form)
       const report = {
         ...form,
-        date: new Date().toISOString(),
         id: route.params.id,
         usr_id: user.id,
         zone_id: user.grupe_id
       };
       
-      navigation.popToTop()
       await api.post('/events/close', report)
-      
+      navigation.popToTop()
     } catch(error) {
       console.log(error)
       alert('Não foi possivel enviar o relátorio...')

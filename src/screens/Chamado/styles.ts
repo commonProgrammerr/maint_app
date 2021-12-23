@@ -6,7 +6,6 @@ import Button from '../../components/Button';
 
 export const Container = styled.View`
   flex: 1;
-  /* align-items: center; */
   background-color: ${props => props.theme.colors.background};
   `;
 
@@ -51,6 +50,7 @@ export const Title = styled.Text`
 
 
 export const DetailsWrapper = styled.View`
+  align-items: flex-start;
   padding: 30px 24px;
   padding-bottom: 0px;
   flex: 1;
@@ -65,7 +65,7 @@ export const LocalDescription = styled.Text`
   background-color: ${props => props.theme.colors.shape};
   padding: 10px 16px;
   border-radius: 5px;
-  
+  width: 100%;
 `
 
 export const ButtonsWrapper = styled.View`

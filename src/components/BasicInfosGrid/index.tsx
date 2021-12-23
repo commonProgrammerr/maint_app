@@ -1,6 +1,15 @@
 import React from "react";
 
-import { Container, ElevatorIcon, GridCollumn, GridItem, Info, InfoIcon, MapIcon, WCIcon } from "./styles";
+import {
+  Container,
+  ElevatorIcon,
+  GridCollumn,
+  GridItem,
+  Info,
+  InfoIcon,
+  MapIcon,
+  WCIcon,
+} from "./styles";
 
 interface BasicInfosGridProps {
   local?: string;
@@ -21,15 +30,13 @@ function BasicInfosGrid({ local, genero, piso, box }: BasicInfosGridProps) {
           <WCIcon />
           <Info>{genero}</Info>
         </GridItem>
-      </GridCollumn>
-      <GridCollumn>
         <GridItem>
           <ElevatorIcon />
           <Info>{piso}</Info>
         </GridItem>
         <GridItem>
           <InfoIcon name="toilet" />
-          <Info>Box {box}</Info>
+          <Info>{box}</Info>
         </GridItem>
       </GridCollumn>
     </Container>

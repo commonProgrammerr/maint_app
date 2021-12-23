@@ -33,11 +33,9 @@ function handleGetTitle(type?: OccurrencesType) {
 }
 
 export function ChamadoScreen({ route, navigation }: ChamdoScreenProps) {
-  const image_url =
-    "https://www.melhoresdestinos.com.br/wp-content/uploads/2020/09/aeroporto-curitiba-banheiros.jpg";
-
+  
   const { id, data } = route.params;
-
+  const image_url = data.img_url 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (

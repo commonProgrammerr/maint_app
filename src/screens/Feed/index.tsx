@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
-
+import { Image } from "react-native";
 import {
   Container,
   Header,
@@ -17,6 +17,7 @@ import { FeedsList } from "../../components/FeedList";
 import { RepairRequestModal } from "../../components/modals/RepairRequest";
 import { FeedScreenProps } from "../../routes/types";
 import { useAuth } from "../../context/AuthContext";
+import { imageB64 } from "./image";
 
 export function FeedScreen({ navigation }: FeedScreenProps) {
   const [selectedId, setSelectedId] = useState("");
@@ -36,13 +37,15 @@ export function FeedScreen({ navigation }: FeedScreenProps) {
       <Header>
         <UserWrampper>
           <UserInfo>
-            <Photo
-              source={{ uri: "https://github.com/commonProgrammerr.png" }}
-            />
-            <User>
+            
+            <Image style={{
+              width: 120,
+              height: 45
+            }} source={{ uri: imageB64 }} />
+            {/* <User>
               <UserGreeting>Olá,</UserGreeting>
               <UserName>{user.name}</UserName>
-            </User>
+            </User> */}
           </UserInfo>
           <ExitButton onPress={logout}>
             <Icon name="log-out" />

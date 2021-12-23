@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import axios from "axios";
 import Modal from "react-native-modal";
 
 import { getOccurenceData, OccurrencesType } from "../../../utils/occurrences";
@@ -46,8 +47,6 @@ export function RepairRequestModal({
   onRequestClose,
 }: RepairRequestModalProps) {
   const navigation = useNavigation();
-
-
   const { loading, result } = useAsyncMemo(
     async () => {
       return await getOccurenceData(id);
@@ -58,9 +57,14 @@ export function RepairRequestModal({
 
   const data = result?.data;
 
-  useEffect(() => onRequestClose, []);
-
-  function handleAceptChamado() {
+  useEffect(() => {
+    return onRequestClose
+  }, []);
+  
+  async function handleAceptChamado() {
+    console.log(data)
+    const url = `http://miimo.a4rsolucoes.com.br/apis/registro/?API=${data?.mac}&VALOR=3`
+    await axios.get(url);
     onRequestClose?.();
     navigation?.navigate("Chamado", { id, data });
   }

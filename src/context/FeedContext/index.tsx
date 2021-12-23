@@ -92,7 +92,12 @@ export function FeedProvider({ children }: FeedProviderProps) {
   useEffect(() => {
     if (page.loading) return;
 
-    setFeed([...feed, ...feedPage]);
+    const newFeed = [...feed, ...feedPage]
+    console.log({
+      grupe: grupe_id,
+      feed: newFeed
+    })
+    setFeed(newFeed);
   }, [page.loading]);
 
   useSocket((io) => {
@@ -118,8 +123,8 @@ export function FeedProvider({ children }: FeedProviderProps) {
   }, []);
 
   const handleReloadFeed = useCallback(async () => {
-    setFeed([]);
     await page.execute();
+    setFeed([]);
   }, []);
 
   const handleLoadNextPage = useCallback(async () => {

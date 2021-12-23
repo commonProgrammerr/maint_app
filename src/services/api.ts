@@ -2,8 +2,8 @@ import axios from 'axios'
 import { OccurrencesType } from '../utils/occurrences'
 
 
-export const SOCKET_BASE_URL = 'http://192.168.15.31:3030'
-// export const SOCKET_BASE_URL = 'https://socketio-teste.herokuapp.com'
+// export const SOCKET_BASE_URL = 'http://192.168.15.31:3030'
+export const SOCKET_BASE_URL = 'https://socketio-teste.herokuapp.com'
 export const REST_BASE_URL = SOCKET_BASE_URL
 // export const REST_BASE_URL = 'http://miimo.a4rsolucoes.com.br/apis'
 
@@ -23,7 +23,8 @@ export type UserAuthDTO = {
   usr_ph?: string,
   usr_name: string,
   usr_grupo: string,
-  usr_status?: string
+  usr_status?: string,
+  usr_empresa: string
 }
 
 
@@ -39,6 +40,7 @@ export type SearchDTO = {
   created_at: string
   local: string
   piso: string
+  mac: string
   box: string
   banheiro?: string
   description?: string

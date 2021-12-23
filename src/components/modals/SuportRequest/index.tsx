@@ -65,6 +65,7 @@ export function SuportRequestModal({
       box: data?.box,
       piso: data?.piso,
       local: data?.local,
+      mac: data?.mac
     });
     onRequestClose?.();
   }
