@@ -62,7 +62,7 @@ export function ChamadoScreen({ route, navigation }: ChamdoScreenProps) {
           <ButtonsText>Finalizar Chamado</ButtonsText>
         </EndButton>
         <ReportButton onPress={() => setIsModalOpen(true)}>
-          <ButtonsText>Solicitar Apio</ButtonsText>
+          <ButtonsText>Solicitar Apoio</ButtonsText>
         </ReportButton>
       </ButtonsWrapper>
 
