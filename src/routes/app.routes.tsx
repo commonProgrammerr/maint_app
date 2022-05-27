@@ -4,7 +4,6 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { FeedScreen } from "../screens/Feed";
 import { ChamadoScreen } from "../screens/Chamado";
 import { ReportScreen } from "../screens/Report";
-import { AuthScreen } from "../screens/Auth";
 import { SocketProvider } from "../context/SocketContext";
 import { FeedProvider } from "../context/FeedContext";
 

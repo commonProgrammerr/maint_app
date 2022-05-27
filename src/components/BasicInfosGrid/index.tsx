@@ -15,7 +15,7 @@ interface BasicInfosGridProps {
   local?: string;
   genero?: string;
   piso?: string;
-  box?: number;
+  box?: number | string | boolean;
 }
 
 function BasicInfosGrid({ local, genero, piso, box }: BasicInfosGridProps) {
@@ -34,10 +34,12 @@ function BasicInfosGrid({ local, genero, piso, box }: BasicInfosGridProps) {
           <ElevatorIcon />
           <Info>{piso}</Info>
         </GridItem>
-        <GridItem>
-          <InfoIcon name="toilet" />
-          <Info>{box}</Info>
-        </GridItem>
+        {box && (
+          <GridItem>
+            <InfoIcon name="toilet" />
+            <Info>{box}</Info>
+          </GridItem>
+        )}
       </GridCollumn>
     </Container>
   );

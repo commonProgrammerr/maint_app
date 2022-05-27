@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Control, Controller } from "react-hook-form";
 import { CheckboxProps } from "expo-checkbox";
 
@@ -23,6 +23,7 @@ interface Props extends Omit<CheckboxProps, "onValueChange"> {
   errors?: {
     [key: string]: any;
   };
+  defaultValue?: string;
   onValueChange?: (value: string) => void;
 }
 
@@ -35,6 +36,7 @@ export function Checkbox({
   options,
   outros,
   errors,
+  defaultValue,
   ...rest
 }: Props) {
   const {
@@ -42,13 +44,13 @@ export function Checkbox({
   } = useTheme();
 
   const [wasOutrosCheck, setWasOutrosCheck] = useState(false);
-
   return (
     <Container>
       {label && <Label>{label}</Label>}
       {errors?.[name] && <Error>{errors[name].message}</Error>}
       <Controller
         control={control}
+        defaultValue={defaultValue}
         render={({ field: { onChange, value } }) => (
           <View style={{ paddingBottom: 12 }}>
             {options.map((op) => (

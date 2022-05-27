@@ -1,14 +1,14 @@
-import { RFValue } from 'react-native-responsive-fontsize';
-import styled from 'styled-components/native';
+import { RFValue } from "react-native-responsive-fontsize";
+import styled from "styled-components/native";
 
-import { MaterialCommunityIcons } from '@expo/vector-icons'
-import { OccurrencesType } from '../../utils/occurrences';
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { OccurrencesType } from "../../utils/occurrences";
 
 export const Container = styled.TouchableOpacity`
   background-color: ${({ theme }) => theme.colors.shape};
   width: 100%;
   height: ${RFValue(128)}px;
-  box-shadow: 1px 2px 4px rgba(0,0,0,0.2);
+  box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.2);
   border-radius: ${RFValue(5)}px;
   padding: 17px 24px;
   padding-bottom: 13px;
@@ -21,10 +21,10 @@ export const Header = styled.Text`
   font-family: ${({ theme }) => theme.fonts.regular};
   color: ${({ theme }) => theme.colors.title};
   font-size: ${RFValue(14)}px;
-`
+`;
 
 interface ContentProps {
-  type?: OccurrencesType
+  type?: OccurrencesType;
 }
 export const Content = styled.Text<ContentProps>`
   font-family: ${({ theme }) => theme.fonts.medium};
@@ -37,31 +37,35 @@ export const Content = styled.Text<ContentProps>`
 
       case OccurrencesType.SUPORT:
         return theme.colors.secondary;
+
+      case OccurrencesType.MAINT:
+        return theme.colors.select_effect;
+
       default:
-        return theme.colors.text + '90';
+        return theme.colors.text + "90";
     }
   }};
-  `
+`;
 export const Footer = styled.View`
   width: 100%;
   flex-direction: row;
   justify-content: flex-end;
   align-items: center;
   margin-top: 14px;
-`
+`;
 export const SubDescription = styled.Text`
   font-family: ${({ theme }) => theme.fonts.regular};
   color: ${({ theme }) => theme.colors.text};
   font-size: ${RFValue(16)}px;
-`
+`;
 export const DescriptionContainer = styled.View`
   flex-direction: row;
-`
+`;
 
 export const Icon = styled(MaterialCommunityIcons).attrs({
-  name: 'elevator-passenger'
+  name: "elevator-passenger",
 })`
   font-size: ${RFValue(20)}px;
   color: ${({ theme }) => theme.colors.text};
   margin-right: 10px;
-`
+`;

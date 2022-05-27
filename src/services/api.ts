@@ -44,4 +44,5 @@ export type SearchDTO = {
   box: string
   banheiro?: string
   description?: string
+  payload?: string
 }

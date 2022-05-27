@@ -1,5 +1,4 @@
 import React from "react";
-import AppLoading from "expo-app-loading";
 import { ThemeProvider } from "styled-components";
 import {
   useFonts,
@@ -12,8 +11,7 @@ import defaultTheme from "./src/global/styles/theme";
 import { Routes } from "./src/routes";
 import { StatusBar } from "expo-status-bar";
 import { AuthProvider } from "./src/context/AuthContext";
-import { SocketProvider } from "./src/context/SocketContext";
-import { FeedProvider } from "./src/context/FeedContext";
+import { LoadingSplash } from "./src/components/LoadingSplash";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -22,14 +20,18 @@ export default function App() {
     Poppins_700Bold,
   });
 
-  if (!fontsLoaded) return <AppLoading />;
+  // if (!fontsLoaded) return <AppLoading />;
 
   return (
     <ThemeProvider theme={defaultTheme}>
-      <AuthProvider>
-        <StatusBar style="light" />
-        <Routes />
-      </AuthProvider>
+      {!fontsLoaded ? (
+        <LoadingSplash />
+      ) : (
+        <AuthProvider>
+          <StatusBar style="light" />
+          <Routes />
+        </AuthProvider>
+      )}
     </ThemeProvider>
   );
 }

@@ -58,6 +58,10 @@ export const StatisWrapper = styled.View<StatusProps>`
         return css`
           background-color: ${props.theme.colors.secondary};
         `;
+      case OccurrencesType.MAINT:
+        return css`
+          background-color: ${props.theme.colors.select_effect};
+        `;
       default:
         return css`
           background-color: ${props.theme.colors.text};

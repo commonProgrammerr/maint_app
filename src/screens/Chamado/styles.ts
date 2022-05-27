@@ -3,6 +3,7 @@ import { FontAwesome5 } from '@expo/vector-icons'
 import { OccurrencesType } from './../../utils/occurrences'
 import { RFPercentage, RFValue } from 'react-native-responsive-fontsize';
 import Button from '../../components/Button';
+import { BarCodeScanner } from 'expo-barcode-scanner';
 
 export const Container = styled.View`
   flex: 1;
@@ -27,6 +28,8 @@ export const Header = styled.View<HeaderProps>`
         return props.theme.colors.attention;
       case OccurrencesType.SUPORT:
         return props.theme.colors.secondary;
+      case OccurrencesType.MAINT:
+        return props.theme.colors.select_effect;
       default:
         return props.theme.colors.text;
     }
@@ -91,5 +94,12 @@ export const EndButton = styled(Button).attrs({
 export const ReportButton = styled(Button).attrs({
   bgColor: 'primary'
 })`
+`
+
+export const Scanner = styled(BarCodeScanner)`
+  /* flex: 1; */
+  background-color: red;
+  
+  /* width: ${RFPercentage(100)}; */
 
 `

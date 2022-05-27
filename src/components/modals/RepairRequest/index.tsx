@@ -47,26 +47,27 @@ export function RepairRequestModal({
   onRequestClose,
 }: RepairRequestModalProps) {
   const navigation = useNavigation();
-  const { loading, result } = useAsyncMemo(
-    async () => {
-      return await getOccurenceData(id);
-    },
-    [id]
-  );
-
+  const { loading, result, error } = useAsyncMemo(async () => {
+    return await getOccurenceData(id);
+  }, [id]);
 
   const data = result?.data;
-
+  useEffect(() => error && console.log(error), [loading, error]);
   useEffect(() => {
-    return onRequestClose
+    return onRequestClose;
   }, []);
-  
+
   async function handleAceptChamado() {
-    console.log(data)
-    const url = `http://miimo.a4rsolucoes.com.br/apis/registro/?API=${data?.mac}&VALOR=3`
-    await axios.get(url);
-    onRequestClose?.();
-    navigation?.navigate("Chamado", { id, data });
+    try {
+      if (data?.type !== OccurrencesType.MAINT) {
+        const url = `http://miimo.a4rsolucoes.com.br/apis/registro/?API=${data?.mac}&VALOR=3`;
+        await axios.get(url);
+      }
+      onRequestClose?.();
+      navigation?.navigate("Chamado", { id, data });
+    } catch (error) {
+      alert("Não foi possivel prosseguir com a operação.");
+    }
   }
 
   return (
@@ -113,14 +114,18 @@ export function RepairRequestModal({
             <WCIcon />
             <Info>{data?.banheiro}</Info>
           </InfoItem>
-          <InfoItem>
-            <InfoIcon name="toilet" />
-            <Info>{data?.box}</Info>
-          </InfoItem>
+          {data?.type === OccurrencesType.MAINT || (
+            <InfoItem>
+              <InfoIcon name="toilet" />
+              <Info>{data?.box}</Info>
+            </InfoItem>
+          )}
           <ButtonWrapper>
             <Button bgColor="sucess" onPress={handleAceptChamado}>
               <AceptIcon />
-              <AceptText>Aceitar</AceptText>
+              <AceptText>
+                {data?.type === OccurrencesType.MAINT ? "Confirmar" : "Aceitar"}
+              </AceptText>
             </Button>
           </ButtonWrapper>
         </Container>
