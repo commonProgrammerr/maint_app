@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { Image } from "react-native";
+import { Image, View } from "react-native";
 import {
   Container,
   Header,
@@ -18,6 +18,7 @@ import { RepairRequestModal } from "../../components/modals/RepairRequest";
 import { FeedScreenProps } from "../../routes/types";
 import { useAuth } from "../../context/AuthContext";
 import { imageB64 } from "./image";
+import { useFeed } from "../../context/FeedContext";
 
 export function FeedScreen({ navigation }: FeedScreenProps) {
   const [selectedId, setSelectedId] = useState("");
@@ -28,20 +29,39 @@ export function FeedScreen({ navigation }: FeedScreenProps) {
   function handleOpemModal(id: string) {
     setSelectedId(id);
   }
-
+  const [touchs, setTouchs] = useState(0);
   const { user, logout } = useAuth();
+  const { clear } = useFeed();
 
+  useEffect(() => {
+    if (touchs >= 3) {
+      clear();
+    } else if (touchs > 0) {
+      const timer = setTimeout(() => {
+        setTouchs(0);
+      }, 1000);
+      return () => {
+        clearInterval(timer);
+      };
+    }
+  }, [touchs]);
+  const imageSizeC = 120 / 45;
+  const imageSize = 66;
   return (
     <Container>
       <StatusBar style="light" />
       <Header>
         <UserWrampper>
           <UserInfo>
-            
-            <Image style={{
-              width: 120,
-              height: 45
-            }} source={{ uri: imageB64 }} />
+            <View onTouchMove={() => setTouchs((last) => last + 1)}>
+              <Image
+                style={{
+                  width: imageSize * imageSizeC,
+                  height: imageSize,
+                }}
+                source={{ uri: imageB64 }}
+              />
+            </View>
             {/* <User>
               <UserGreeting>Olá,</UserGreeting>
               <UserName>{user.name}</UserName>
