@@ -68,7 +68,7 @@ export function ChamadoScreen({ route, navigation }: ChamdoScreenProps) {
             genero={data?.banheiro}
           />
           {data?.description && (
-            <LocalDescription>{data?.description}</LocalDescription>
+            <LocalDescription>{String(data?.description)}</LocalDescription>
           )}
         </DetailsWrapper>
         <ButtonsWrapper>
@@ -81,15 +81,6 @@ export function ChamadoScreen({ route, navigation }: ChamdoScreenProps) {
           <ReportButton onPress={() => setIsModalOpen(true)}>
             <ButtonsText>Solicitar Apoio</ButtonsText>
           </ReportButton>
-          {/* {!isMaintContext ? (
-            <ReportButton onPress={() => setIsModalOpen(true)}>
-              <ButtonsText>Solicitar Apoio</ButtonsText>
-            </ReportButton>
-          ) : (
-            <ReportButton>
-              <ButtonsText>Abrir leitor</ButtonsText>
-            </ReportButton>
-          )} */}
         </ButtonsWrapper>
 
         <SuportRequestModal

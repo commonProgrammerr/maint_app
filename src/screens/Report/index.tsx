@@ -22,6 +22,7 @@ import {
   Container,
   Form,
   PhontoButton,
+  Scroll,
   SendButton,
 } from "./styles";
 
@@ -29,6 +30,45 @@ interface FormData {
   tools: string;
   problem: string;
 }
+
+const confirm_fields = [
+  {
+    name: "papel",
+    label: "Reposição de papel",
+  },
+  {
+    name: "toalhas",
+    label: "Reposição da toalha",
+  },
+  {
+    name: "sabao",
+    label: "Reposição do sabão",
+  },
+  {
+    name: "sanitario",
+    label: "Limpeza dos sanitarios",
+  },
+  {
+    name: "mictorio",
+    label: "Limpeza dos mictórios",
+  },
+  {
+    name: "lavador",
+    label: "Limpeza dos lavadores",
+  },
+  {
+    name: "espelhos",
+    label: "Limpeza dos espelhos",
+  },
+  {
+    name: "chao",
+    label: "Limpeza do chão",
+  },
+  {
+    name: "lixo",
+    label: "Retirada do lixo",
+  },
+];
 
 export function ReportScreen({ route, navigation }: ReportScreenProps) {
   const ferramentas = getToolsList();
@@ -43,6 +83,12 @@ export function ReportScreen({ route, navigation }: ReportScreenProps) {
           "Defina a ferramenta utilizada para solução do problema"
         ),
     type: Yup.string().required("Defina o problema apresentado"),
+    ...(isMaintContext
+      ? confirm_fields.reduce((p, c) => {
+          p[c.name] = Yup.string().required(`Faltou aqui!`);
+          return p;
+        }, {} as Record<string, any>)
+      : {}),
   });
 
   const {
@@ -53,8 +99,6 @@ export function ReportScreen({ route, navigation }: ReportScreenProps) {
   } = useForm({
     resolver: yupResolver(schema),
   });
-
-  const [maitContext, setMaintContext] = useState(isMaintContext);
 
   async function handleSendReport(form: FormData) {
     try {
@@ -116,26 +160,31 @@ export function ReportScreen({ route, navigation }: ReportScreenProps) {
       <Header bg="sucess">
         <Title>Relátorio</Title>
       </Header>
-      <ScrollView style={{ flex: 1 }}>
-        <Form>
+      <Form>
+        <Scroll style={{ flex: 1 }}>
           <Checkbox
             control={control}
-            name="type"
-            label="Qual o problema apresentado?"
-            outros
-            errors={errors}
-            defaultValue={isMaintContext ? "Manutenção preventiva" : undefined}
-            onValueChange={(value) => {
-              setMaintContext(value === "Manutenção preventiva");
+            style={{
+              marginTop: 12,
             }}
-            options={[
-              "Entupimento",
-              "Entupimento com transbordamento",
-              "Vazamento de água",
-              "Manutenção preventiva",
-            ]}
+            name="type"
+            label={
+              isMaintContext ? "Atividade" : "Qual o problema apresentado?"
+            }
+            errors={errors}
+            outros={!isMaintContext}
+            defaultValue={isMaintContext ? "Manutenção preventiva" : undefined}
+            options={
+              isMaintContext
+                ? ["Manutenção preventiva"]
+                : [
+                    "Entupimento",
+                    "Entupimento com transbordamento",
+                    "Vazamento de água",
+                  ]
+            }
           />
-          {!maitContext && (
+          {!isMaintContext && (
             <Dropdown
               control={control}
               name="tools"
@@ -147,31 +196,45 @@ export function ReportScreen({ route, navigation }: ReportScreenProps) {
               }))}
             />
           )}
-          <ButtonsWrapper>
-            <View
-              style={{
-                width: "100%",
-                flexDirection: "row",
-                justifyContent: "flex-end",
-                marginBottom: 16,
-              }}
-            >
-              <PhontoButton onPress={takePicture}>
-                <Feather size={RFValue(18)} color="white" name="camera" />
-              </PhontoButton>
-              <PhontoButton onPress={pickImage}>
-                <Feather size={RFValue(18)} color="white" name="folder-plus" />
-              </PhontoButton>
-            </View>
-            <SendButton onPress={handleSubmit(handleSendReport)}>
-              <ButtonsText>Enviar!</ButtonsText>
-            </SendButton>
-            <BackButton onPress={navigation.goBack}>
-              <ButtonsText>Voltar</ButtonsText>
-            </BackButton>
-          </ButtonsWrapper>
-        </Form>
-      </ScrollView>
+          {!isMaintContext && (
+            <Title style={{ marginBottom: 20, marginTop: 100 }} color="title">
+              Outras Atividades
+            </Title>
+          )}
+          {confirm_fields.map((fld) => (
+            <Checkbox
+              key={fld.name}
+              control={control}
+              errors={errors}
+              {...fld}
+              options={["Realizada", "Não realizada"]}
+            />
+          ))}
+        </Scroll>
+      </Form>
+      <ButtonsWrapper>
+        <View
+          style={{
+            width: "100%",
+            flexDirection: "row",
+            justifyContent: "flex-end",
+            marginBottom: 16,
+          }}
+        >
+          <PhontoButton onPress={takePicture}>
+            <Feather size={RFValue(18)} color="white" name="camera" />
+          </PhontoButton>
+          <PhontoButton onPress={pickImage}>
+            <Feather size={RFValue(18)} color="white" name="folder-plus" />
+          </PhontoButton>
+        </View>
+        <SendButton onPress={handleSubmit(handleSendReport)}>
+          <ButtonsText>Enviar!</ButtonsText>
+        </SendButton>
+        <BackButton onPress={navigation.goBack}>
+          <ButtonsText>Voltar</ButtonsText>
+        </BackButton>
+      </ButtonsWrapper>
     </Container>
   );
 }

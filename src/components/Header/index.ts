@@ -14,12 +14,17 @@ export const Header = styled.View<HeaderProps>`
   justify-content: center;
   padding-bottom: 15px;
   
-  background-color: ${({theme, bg = 'primary'}) => theme.colors[bg]};
+  background-color: ${({ theme, bg = 'primary' }) => theme.colors[bg]};
 `
-export const Title = styled.Text`
+
+interface TitleProps {
+  color?: keyof typeof theme.colors
+}
+
+export const Title = styled.Text<TitleProps>`
   font-size: ${RFValue(20)}px;
   line-height: ${RFValue(33)}px;
   font-family: ${(props) => props.theme.fonts.medium};
-  color: ${(props) => props.theme.colors.shape};
+  color: ${(props) => (props.color && props.theme.colors[props.color]) || props.theme.colors.shape};
   
   `;

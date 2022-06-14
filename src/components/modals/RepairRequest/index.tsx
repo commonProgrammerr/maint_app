@@ -32,6 +32,7 @@ import {
   WCIcon,
 } from "../../BasicInfosGrid/styles";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
+import { api } from "../../../services/api";
 
 interface RepairRequestModalProps {
   visible: boolean;
@@ -40,6 +41,19 @@ interface RepairRequestModalProps {
 }
 const delay = async (time: number) =>
   new Promise((resolve) => setTimeout(resolve, time));
+
+function getTagName(tag: OccurrencesType) {
+  switch (tag) {
+    case OccurrencesType.MAINT:
+      return "Manuntenção";
+    case OccurrencesType.SUPORT:
+      return "Suporte";
+    case OccurrencesType.REPARO:
+      return "Reparo";
+    default:
+      return "Desconhecido";
+  }
+}
 
 export function RepairRequestModal({
   id,
@@ -62,6 +76,11 @@ export function RepairRequestModal({
       if (data?.type !== OccurrencesType.MAINT) {
         const url = `http://miimo.a4rsolucoes.com.br/apis/registro/?API=${data?.mac}&VALOR=3`;
         await axios.get(url);
+      } else {
+        api.post("/acept", {
+          id,
+          data,
+        });
       }
       onRequestClose?.();
       navigation?.navigate("Chamado", { id, data });
@@ -99,13 +118,9 @@ export function RepairRequestModal({
             </TimeContainer>
             <StatisWrapper type={data?.type}>
               <AlertIcon />
-              <StatusText>{data && OccurrencesType[data.type]}</StatusText>
+              <StatusText>{data ? getTagName(data.type) : "Error"}</StatusText>
             </StatisWrapper>
           </Header>
-          <InfoItem>
-            <MapIcon />
-            <Info>{data?.local}</Info>
-          </InfoItem>
           <InfoItem>
             <ElevatorIcon />
             <Info>{data?.piso}</Info>
@@ -113,6 +128,10 @@ export function RepairRequestModal({
           <InfoItem>
             <WCIcon />
             <Info>{data?.banheiro}</Info>
+          </InfoItem>
+          <InfoItem>
+            <MapIcon />
+            <Info>{data?.local}</Info>
           </InfoItem>
           {data?.type === OccurrencesType.MAINT || (
             <InfoItem>
@@ -123,9 +142,7 @@ export function RepairRequestModal({
           <ButtonWrapper>
             <Button bgColor="sucess" onPress={handleAceptChamado}>
               <AceptIcon />
-              <AceptText>
-                {data?.type === OccurrencesType.MAINT ? "Confirmar" : "Aceitar"}
-              </AceptText>
+              <AceptText>{"Iniciar Manutenção"}</AceptText>
             </Button>
           </ButtonWrapper>
         </Container>

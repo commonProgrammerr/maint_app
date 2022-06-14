@@ -9,11 +9,14 @@ import React, {
 } from "react";
 import { useAsync } from "react-async-hook";
 import * as Notifications from "expo-notifications";
-
 import { api, FeedItem, FeedDTO, SOCKET_BASE_URL } from "../../services/api";
 import { useSocket } from "../../context/SocketContext";
 import { OccurrencesType2String } from "../../utils/occurrences";
 import { useAuthUser } from "../AuthContext";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+// import { database } from "../../database";
+// import { Event } from "../../database/models/event";
 
 interface FeedProviderProps {
   children: ReactNode;
@@ -25,6 +28,7 @@ interface FeedContextType {
   reloadFeed: () => Promise<void>;
   loading: boolean;
   error?: Error;
+  clear: () => void;
 }
 
 const feedContext = createContext<FeedContextType | null>(null);
@@ -44,7 +48,6 @@ Notifications.setNotificationHandler({
     importance: Notifications.AndroidImportance.HIGH,
     sound: "notification-sound.wav",
     vibrationPattern: [0, 200, 200, 100],
-    
   });
   await Notifications.setNotificationChannelAsync("close-ocurrences", {
     name: "Ocorrencia encerrada",
@@ -74,29 +77,74 @@ async function scheduleCloseEventPushNotification() {
     trigger: { seconds: 1, channelId: "close-ocurrences" },
   });
 }
+function removeCopy<T>(arr: T[], cb: (a: T, b: T) => boolean): T[] {
+  return arr.filter((item, i) => {
+    return !arr.slice(i + 1).find((it) => cb(item, it));
+  });
+}
 
 export function FeedProvider({ children }: FeedProviderProps) {
   const { grupe_id } = useAuthUser();
-  const page = useAsync(async () => {
-    return (
-      await api.post<FeedDTO>("/events/feed/", {
-        zone_id: grupe_id,
-      })
-    ).data;
-  }, []);
+  const page = useAsync(
+    async (page: number) => {
+      // const colection = database.get("events");
+      // const users = (await colection.query().fetch()) as Event[];
+
+      // console.log("users", users);
+      return (
+        await api.post<FeedDTO>("/events/feed/", {
+          page,
+          zone_id: grupe_id,
+        })
+      ).data;
+
+      // return {
+      //   page: 0,
+      //   feed: users.map<FeedItem>((ev) => ({
+      //     id: ev.online_id,
+      //     local: ev.local,
+      //     piso: ev.piso,
+      //     type: ev.type,
+      //   })),
+      // } as FeedDTO;
+    },
+    [1]
+  );
 
   const feedPage = page.result?.feed || ([] as FeedItem[]);
   const [feed, setFeed] = useState([] as FeedItem[]);
+
+  useEffect(() => {
+    (async () => {
+      const feedStoraged = await AsyncStorage.getItem("@miimo_expo:feed");
+      if (feedStoraged) {
+        const feedData = JSON.parse(feedStoraged) as FeedItem[];
+        setFeed((last) =>
+          removeCopy([...last, ...feedData], (a, b) => a.id === b.id)
+        );
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      await AsyncStorage.setItem(
+        "@miimo_expo:feed",
+        JSON.stringify(removeCopy(feed, (a, b) => a.id === b.id))
+      );
+      console.log(feed);
+    })();
+  }, [feed]);
 
   useEffect(() => console.log("render", "feed"));
   useEffect(() => {
     if (page.loading) return;
 
-    const newFeed = [...feed, ...feedPage]
+    const newFeed = [...feed, ...feedPage];
     console.log({
       grupe: grupe_id,
-      feed: newFeed
-    })
+      feed: newFeed,
+    });
     setFeed(newFeed);
   }, [page.loading]);
 
@@ -123,22 +171,29 @@ export function FeedProvider({ children }: FeedProviderProps) {
   }, []);
 
   const handleReloadFeed = useCallback(async () => {
-    await page.execute();
-    setFeed([]);
-  }, []);
+    if (!page.loading && !page.error) {
+      setFeed([]);
+      await page.execute(1);
+    }
+  }, [page]);
 
   const handleLoadNextPage = useCallback(async () => {
-    await page.execute();
-  }, []);
+    if (!page.loading && !page.error && page.result?.feed.length) {
+      await page.execute((page.result?.page ?? 1) + 1);
+    }
+  }, [page]);
 
   return (
     <feedContext.Provider
       value={{
-        feed: feed,
+        feed: removeCopy(feed, (a, b) => a.id === b.id).sort(
+          (a, b) => a.type - b.type
+        ),
         loading: page.loading,
         error: page.error,
         loadNextFeedPage: handleLoadNextPage,
         reloadFeed: handleReloadFeed,
+        clear: () => setFeed([]),
       }}
     >
       {children}
