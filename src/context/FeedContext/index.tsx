@@ -157,9 +157,21 @@ export function FeedProvider({ children }: FeedProviderProps) {
     };
   });
 
-  function handleAddItem(data: FeedItem) {
+  async function handleAddItem(data: FeedItem) {
     console.log("@event:new\n", data.id);
     if (!feed.find((item) => item.id === data.id)) {
+      // await database.write(async () => {
+      //   const events_coletion = database.get<Event>("events");
+      //   return await events_coletion.create((ev) => {
+      //     ev.online_id = data.id;
+      //     ev.closed = false;
+      //     ev.online_closed = false;
+      //     ev.piso = data.piso;
+      //     ev.type = data.type;
+      //     ev.local = data.local;
+      //     ev.box = undefined;
+      //   });
+      // });
       scheduleNewEventPushNotification(data);
       setFeed((last) => [data, ...last]);
     }

@@ -23,16 +23,16 @@ function BasicInfosGrid({ local, genero, piso, box }: BasicInfosGridProps) {
     <Container>
       <GridCollumn>
         <GridItem>
-          <MapIcon />
-          <Info>{local}</Info>
+          <ElevatorIcon />
+          <Info>{piso}</Info>
         </GridItem>
         <GridItem>
           <WCIcon />
           <Info>{genero}</Info>
         </GridItem>
         <GridItem>
-          <ElevatorIcon />
-          <Info>{piso}</Info>
+          <MapIcon />
+          <Info>{local}</Info>
         </GridItem>
         {box && (
           <GridItem>

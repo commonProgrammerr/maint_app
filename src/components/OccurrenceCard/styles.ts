@@ -1,7 +1,7 @@
 import { RFValue } from "react-native-responsive-fontsize";
 import styled from "styled-components/native";
 
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons, FontAwesome5 } from "@expo/vector-icons";
 import { OccurrencesType } from "../../utils/occurrences";
 
 export const Container = styled.TouchableOpacity`
@@ -12,7 +12,7 @@ export const Container = styled.TouchableOpacity`
   border-radius: ${RFValue(5)}px;
   padding: 17px 24px;
   padding-bottom: 13px;
-  margin-top: 16px;
+  margin-bottom: 16px;
   flex-direction: column;
   justify-content: space-between;
 `;
@@ -49,23 +49,37 @@ export const Content = styled.Text<ContentProps>`
 export const Footer = styled.View`
   width: 100%;
   flex-direction: row;
-  justify-content: flex-end;
   align-items: center;
   margin-top: 14px;
-`;
-export const SubDescription = styled.Text`
-  font-family: ${({ theme }) => theme.fonts.regular};
-  color: ${({ theme }) => theme.colors.text};
-  font-size: ${RFValue(16)}px;
-`;
-export const DescriptionContainer = styled.View`
-  flex-direction: row;
+  justify-content: space-between;
 `;
 
-export const Icon = styled(MaterialCommunityIcons).attrs({
+interface SubDescriptionProps {
+  type?: OccurrencesType
+}
+
+export const SubDescription = styled.Text<SubDescriptionProps>`
+  font-family: ${({ theme }) => theme.fonts.regular};
+  color: ${({ theme, type }) => type === OccurrencesType.REPARO ? theme.colors.attention_light : theme.colors.text};
+  font-size: ${RFValue(16)}px;
+  `;
+export const DescriptionContainer = styled.View`
+  flex-direction: row;
+  align-items: center;
+  max-width: 50%;
+  `;
+
+export const FloorIcon = styled(MaterialCommunityIcons).attrs({
   name: "elevator-passenger",
 })`
   font-size: ${RFValue(20)}px;
   color: ${({ theme }) => theme.colors.text};
-  margin-right: 10px;
+  margin-right: 6px;
+`;
+export const ClockIcon = styled(FontAwesome5).attrs({
+  name: "clock",
+})`
+  font-size: ${RFValue(19)}px;
+  color: ${({ theme, type }) => type === OccurrencesType.REPARO ? theme.colors.attention_light : theme.colors.text};
+  margin-right: 8px;
 `;
