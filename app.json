@@ -2,7 +2,7 @@
   "expo": {
     "name": "MaintApp",
     "slug": "maint-app",
-    "version": "1.03.04",
+    "version": "1.04.01",
     "icon": "./local/assets/icon.png",
     "assetBundlePatterns": ["**/*"],
     "plugins": [

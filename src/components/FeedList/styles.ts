@@ -1,17 +1,20 @@
-import styled from 'styled-components/native';
+import styled, { css } from 'styled-components/native';
 import { SectionListProps } from "react-native";
 import { FeedItem } from '../../services/api';
 
 export const Container = styled.View`
   flex: 1;
   padding: 17px 24px;
+  padding-top: 8px;
   padding-bottom: 0px;
   width: 100%;
 `;
 
-export const ListaDeChamados = styled.SectionList<SectionListProps<FeedItem, { title: string, data: FeedItem[] }>>`
+type FeedListProps = SectionListProps<FeedItem, { title: string, data: FeedItem[] }> & { isEmpty: boolean }
+export const ListaDeChamados = styled.SectionList<FeedListProps>`
   width: 100%;
   margin: 16px 0;
+  flex: 1;
   
 `
 

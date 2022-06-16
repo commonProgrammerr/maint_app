@@ -9,6 +9,8 @@ import { LoadIndicator } from "../LoadIndicator";
 import { useFeed } from "../../context/FeedContext";
 import { SectionList } from "react-native";
 import { grupeBy } from "../../utils/grupeBy";
+import EnptyFeed from "./EnptyFeed";
+import { useNetworkContext } from "../../context/NetworkContext";
 interface FeedListProps {
   handleOpenModal: (id: string) => void;
 }
@@ -17,17 +19,21 @@ const day_milis = 24 * 60 * 60 * 1000;
 export function FeedsList({ handleOpenModal }: FeedListProps) {
   const { loading, feed, reloadFeed, loadNextFeedPage } = useFeed();
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const now = new Date();
 
-  const grupedField = grupeBy(feed, (item) => {
-    const item_date = item.time ? new Date(item.time) : new Date();
-    const today = new Date();
-    const time_dif = item_date.getTime() - today.getTime();
+  const { isConnected } = useNetworkContext();
+
+  const grupedField = grupeBy(isConnected ? feed : [], (item) => {
+    const item_date = item.time ? new Date(item.time) : now;
+    const timeDif = item_date.getTime() - now.getTime();
     const day = ("" + item_date.getDate()).padStart(2, "0");
     const month = String(item_date.getMonth() + 1).padStart(2, "0");
     const year = item_date.getFullYear();
 
-    return Math.abs(time_dif) < day_milis
-      ? time_dif < 0
+    return Math.abs(timeDif) < day_milis
+      ? "Hoje"
+      : Math.abs(timeDif) < day_milis * 2
+      ? timeDif < 0
         ? "Ontem"
         : "Amanhã"
       : `${day}/${month}/${year}`;
@@ -55,12 +61,17 @@ export function FeedsList({ handleOpenModal }: FeedListProps) {
         sections={Object.keys(grupedField)
           .sort((a) => {
             switch (a) {
-              case "Ontem":
+              case "Amanhã":
                 return -1;
+              case "Ontem":
+                return -2;
               case "Hoje":
                 return -10;
               default:
-                return 0;
+                const num = a.split("/").map(Number);
+                return (
+                  now.getTime() - new Date(num[0], num[1], num[2]).getTime()
+                );
             }
           })
           .map((title) => ({
@@ -76,6 +87,7 @@ export function FeedsList({ handleOpenModal }: FeedListProps) {
             onPress={() => handleOpenModal((item as FeedItem).id)}
           />
         )}
+        isEmpty={feed.length <= 0}
         keyExtractor={genId}
         showsHorizontalScrollIndicator={false}
         onEndReached={loadNextFeedPage}
@@ -83,6 +95,7 @@ export function FeedsList({ handleOpenModal }: FeedListProps) {
         refreshing={isRefreshing}
         onRefresh={handleRefresh}
         stickySectionHeadersEnabled
+        ListEmptyComponent={EnptyFeed}
         ListFooterComponent={() => (
           <LoadIndicator style={{ marginVertical: 6 }} loading={loading} />
         )}

@@ -19,6 +19,7 @@ import { FeedScreenProps } from "../../routes/types";
 import { useAuth } from "../../context/AuthContext";
 import { imageB64 } from "./image";
 import { useFeed } from "../../context/FeedContext";
+import { NetworkContextProvider } from "../../context/NetworkContext";
 
 export function FeedScreen({ navigation }: FeedScreenProps) {
   const [selectedId, setSelectedId] = useState("");
@@ -31,7 +32,7 @@ export function FeedScreen({ navigation }: FeedScreenProps) {
   }
   const [touchs, setTouchs] = useState(0);
   const { user, logout } = useAuth();
-  const { clear } = useFeed();
+  const { clear, loading } = useFeed();
 
   useEffect(() => {
     if (touchs >= 3) {
@@ -72,7 +73,9 @@ export function FeedScreen({ navigation }: FeedScreenProps) {
           </ExitButton>
         </UserWrampper>
       </Header>
-      <FeedsList handleOpenModal={handleOpemModal} />
+      <NetworkContextProvider reloadTrigger={loading}>
+        <FeedsList handleOpenModal={handleOpemModal} />
+      </NetworkContextProvider>
       <RepairRequestModal
         id={selectedId}
         visible={!!selectedId}

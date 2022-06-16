@@ -12,9 +12,9 @@ export default {
 
     attention: '#E83F5B',
     attention_light: lighten(0.15, '#E83F5B'),
-    
-    select_effect: '#3F8DE8',
 
+    select_effect: '#3F8DE8',
+    opaque: '#AFB2BB',
     shape: '#fff',
     text: '#969cb2',
     title: '#363f5f',
