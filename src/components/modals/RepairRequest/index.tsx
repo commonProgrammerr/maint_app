@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import axios from "axios";
 import Modal from "react-native-modal";
 
@@ -33,7 +33,7 @@ import {
 } from "../../BasicInfosGrid/styles";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
 import { api } from "../../../services/api";
-
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 interface RepairRequestModalProps {
   visible: boolean;
   onRequestClose: () => void;
@@ -61,6 +61,7 @@ export function RepairRequestModal({
   onRequestClose,
 }: RepairRequestModalProps) {
   const navigation = useNavigation();
+  const [now, updateCurrentTime] = useState(new Date());
   const { loading, result, error } = useAsyncMemo(async () => {
     return await getOccurenceData(id);
   }, [id]);
@@ -70,6 +71,17 @@ export function RepairRequestModal({
   useEffect(() => {
     return onRequestClose;
   }, []);
+
+  useEffect(() => {
+    if (data && visible) {
+      const dif = Math.abs(now.getTime() - new Date(data.created_at).getTime());
+      const timeout = dif / (60 * 60 * 1000) > 1 ? 60000 : 1000;
+      const timer = setTimeout(() => {
+        updateCurrentTime(new Date());
+      }, timeout);
+      return () => clearInterval(timer);
+    }
+  }, [now, visible, data]);
 
   async function handleAceptChamado() {
     try {
@@ -114,13 +126,21 @@ export function RepairRequestModal({
           <Header>
             <TimeContainer>
               <TimeIcon />
-              <TimeInfo>{data && getTimeString(data.created_at)}</TimeInfo>
+              <TimeInfo>{data && getTimeString(data.created_at, now)}</TimeInfo>
             </TimeContainer>
             <StatisWrapper type={data?.type}>
               <AlertIcon />
               <StatusText>{data ? getTagName(data.type) : "Error"}</StatusText>
             </StatisWrapper>
           </Header>
+          <InfoItem>
+            <MaterialCommunityIcons
+              name="office-building-marker"
+              size={24}
+              color="black"
+            />
+            <Info>Aeroporto Nacional dos Guararapes</Info>
+          </InfoItem>
           <InfoItem>
             <ElevatorIcon />
             <Info>{data?.piso}</Info>

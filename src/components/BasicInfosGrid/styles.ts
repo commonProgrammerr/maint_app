@@ -47,6 +47,12 @@ export const ElevatorIcon = styled(MaterialCommunityIcons).attrs({
   ${infoIconsStyle}
   margin-left: -3.5px;
 `;
+export const BuildingLocale = styled(MaterialCommunityIcons).attrs({
+  name: "office-building-marker",
+})`
+  ${infoIconsStyle}
+  margin-left: -3.5px;
+`;
 export const WCIcon = styled(FontAwesome5).attrs({
   name: "restroom",
 })`
