@@ -7,7 +7,6 @@ import OccurrenceCard from "../OccurrenceCard";
 import { Container, Label, ListaDeChamados } from "./styles";
 import { LoadIndicator } from "../LoadIndicator";
 import { useFeed } from "../../context/FeedContext";
-import { SectionList } from "react-native";
 import { grupeBy } from "../../utils/grupeBy";
 import EnptyFeed from "./EnptyFeed";
 import { useNetworkContext } from "../../context/NetworkContext";
@@ -15,7 +14,37 @@ interface FeedListProps {
   handleOpenModal: (id: string) => void;
 }
 
-const day_milis = 24 * 60 * 60 * 1000;
+function getMonthName(month: number) {
+  switch (month) {
+    case 0:
+      return "Janeiro";
+    case 1:
+      return "Fevereiro";
+    case 2:
+      return "Março";
+    case 3:
+      return "Abril";
+    case 4:
+      return "Maio";
+    case 5:
+      return "Junho";
+    case 6:
+      return "Julho";
+    case 7:
+      return "Agosto";
+    case 8:
+      return "Setembro";
+    case 9:
+      return "Outubro";
+    case 10:
+      return "Novembro";
+    case 11:
+      return "Dezembro";
+    default:
+      return month < 0 ? "Janeiro" : "Dezembro";
+  }
+}
+
 export function FeedsList({ handleOpenModal }: FeedListProps) {
   const { loading, feed, reloadFeed, loadNextFeedPage } = useFeed();
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -25,18 +54,18 @@ export function FeedsList({ handleOpenModal }: FeedListProps) {
 
   const grupedField = grupeBy(isConnected ? feed : [], (item) => {
     const item_date = item.time ? new Date(item.time) : now;
-    const timeDif = item_date.getTime() - now.getTime();
-    const day = ("" + item_date.getDate()).padStart(2, "0");
-    const month = String(item_date.getMonth() + 1).padStart(2, "0");
-    const year = item_date.getFullYear();
 
-    return Math.abs(timeDif) < day_milis
-      ? "Hoje"
-      : Math.abs(timeDif) < day_milis * 2
-      ? timeDif < 0
-        ? "Ontem"
-        : "Amanhã"
-      : `${day}/${month}/${year}`;
+    switch (item_date.getDate()) {
+      case now.getDate():
+        return "Hoje";
+      default:
+        const day = ("" + item_date.getDate()).padStart(2, "0");
+        const month = String(item_date.getMonth() + 1).padStart(2, "0");
+        const year = item_date.getFullYear();
+        return now.getFullYear() > year
+          ? `${day}/${month}/${year}`
+          : `${day} de ${getMonthName(item_date.getMonth())}`;
+    }
   });
 
   function handleRefresh() {

@@ -1,6 +1,6 @@
 import styled, { css } from "styled-components/native";
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
-import { FontAwesome5 } from "@expo/vector-icons";
+import { FontAwesome5, MaterialCommunityIcons } from "@expo/vector-icons";
 
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { OccurrencesType } from "../../../utils/occurrences";
@@ -25,12 +25,13 @@ export const TimeContainer = styled.View`
   justify-content: flex-end;
   padding: 8px 12px;
 `;
-export const TimeIcon = styled(FontAwesome5).attrs({
-  name: "clock",
+
+export const TimeIcon = styled(MaterialCommunityIcons).attrs({
+  name: "timer-sand",
 })`
   font-size: ${RFValue(20)}px;
   color: ${({ theme }) => theme.colors.text};
-  margin-right: 10px;
+  margin-right: 4px;
 `;
 export const TimeInfo = styled.Text`
   font-family: ${({ theme }) => theme.fonts.regular};
