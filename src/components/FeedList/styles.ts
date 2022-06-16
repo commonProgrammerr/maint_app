@@ -4,9 +4,7 @@ import { FeedItem } from '../../services/api';
 
 export const Container = styled.View`
   flex: 1;
-  padding: 17px 24px;
-  padding-top: 8px;
-  padding-bottom: 0px;
+  padding: 0px 24px;
   width: 100%;
 `;
 
@@ -23,5 +21,5 @@ export const Label = styled.Text`
   font-family: ${({ theme }) => theme.fonts.medium};
   width: 100%;
   background-color: ${props => props.theme.colors.background};
-  margin-bottom: 4px;
+  padding-bottom: 6px;
 `

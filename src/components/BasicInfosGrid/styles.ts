@@ -41,13 +41,13 @@ export const MapIcon = styled(FontAwesome5).attrs({
   ${infoIconsStyle}
   font-size: ${RFValue(16)}px;
 `;
-export const ElevatorIcon = styled(MaterialCommunityIcons).attrs({
+export const ElevatorIcon = styled(MaterialCommunityIcons as any).attrs({
   name: "elevator-passenger",
 })`
   ${infoIconsStyle}
   margin-left: -3.5px;
 `;
-export const BuildingLocale = styled(MaterialCommunityIcons).attrs({
+export const BuildingLocale = styled(MaterialCommunityIcons as any).attrs({
   name: "office-building-marker",
 })`
   ${infoIconsStyle}

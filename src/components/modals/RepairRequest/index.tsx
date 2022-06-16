@@ -25,6 +25,7 @@ import { useNavigation } from "../../../context/use-navigation";
 import { getTimeString } from "../../../utils/getTimeString";
 import { LoadIndicator } from "../../LoadIndicator";
 import {
+  BuildingLocale,
   ElevatorIcon,
   Info,
   InfoIcon,
@@ -134,12 +135,8 @@ export function RepairRequestModal({
             </StatisWrapper>
           </Header>
           <InfoItem>
-            <MaterialCommunityIcons
-              name="office-building-marker"
-              size={24}
-              color="black"
-            />
-            <Info>Aeroporto Nacional dos Guararapes</Info>
+            <BuildingLocale />
+            <Info>Aeroporto Internacional dos Guararapes</Info>
           </InfoItem>
           <InfoItem>
             <ElevatorIcon />

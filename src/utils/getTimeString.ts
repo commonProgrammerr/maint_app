@@ -2,9 +2,13 @@ export function getTimeString(value: number | string | Date, reference?: Date) {
 
   const now = (reference || new Date()).getTime();
   const time = new Date(value).getTime();
+  const dif = Math.abs(now - time)
 
+  if (dif < 60000) {
+    return "agora pouco"
+  }
 
-  const seconds = Math.floor(Math.abs(now - time) / 1000);
+  const seconds = Math.floor(dif / 1000);
   const minutes = Math.floor(seconds / 60);
   const hours = Math.floor(minutes / 60);
 

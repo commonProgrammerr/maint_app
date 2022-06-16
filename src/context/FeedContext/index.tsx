@@ -198,9 +198,13 @@ export function FeedProvider({ children }: FeedProviderProps) {
   return (
     <feedContext.Provider
       value={{
-        feed: removeCopy(feed, (a, b) => a.id === b.id).sort(
-          (a, b) => a.type - b.type
-        ),
+        feed: removeCopy(feed, (a, b) => a.id === b.id).sort((a, b) => {
+          const a_time = a.time ? new Date(a.time) : new Date();
+          const b_time = b.time ? new Date(b.time) : new Date();
+          const time_dif = b_time.getTime() - a_time.getTime();
+          const type_dif = a.type - b.type;
+          return type_dif * 865e15 + Math.round(time_dif / 1000);
+        }),
         loading: page.loading,
         error: page.error,
         loadNextFeedPage: handleLoadNextPage,
