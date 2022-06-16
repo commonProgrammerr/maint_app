@@ -10,6 +10,7 @@ import {
   FloorIcon,
   SubDescription,
   ClockIcon,
+  Alert,
 } from "./styles";
 
 interface CardChamadoProps {
@@ -20,7 +21,7 @@ interface CardChamadoProps {
 function CardChamado({ data, onPress }: CardChamadoProps) {
   const time = !!data?.time
     ? new Date(data.time).toLocaleTimeString().slice(0, 5)
-    : "agora";
+    : "URGENTE";
 
   const isReparo = data?.type === OccurrencesType.REPARO;
   const [showText, setShowText] = useState(!isReparo);
@@ -36,15 +37,23 @@ function CardChamado({ data, onPress }: CardChamadoProps) {
 
   return (
     <Container onPress={onPress}>
-      <Content type={data?.type}>{showText && data?.local}</Content>
+      <Content type={data?.type}>{data?.local}</Content>
       <Footer>
-        <DescriptionContainer>
-          <ClockIcon type={data?.type} />
+        <DescriptionContainer
+          style={{
+            opacity: showText ? 1 : 0,
+            alignItems:
+              data?.type === OccurrencesType.REPARO ? "baseline" : "center",
+          }}
+        >
+          {data?.type === OccurrencesType.REPARO ? <Alert /> : <ClockIcon />}
           <SubDescription type={data?.type}>{time}</SubDescription>
         </DescriptionContainer>
-        <DescriptionContainer>
+        <DescriptionContainer style={{ justifyContent: "flex-end" }}>
           <FloorIcon />
-          <SubDescription>{data?.piso}</SubDescription>
+          <SubDescription numberOfLines={1}>
+            {data?.piso.replace(/\s|\n/g, " ")}
+          </SubDescription>
         </DescriptionContainer>
       </Footer>
     </Container>

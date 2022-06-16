@@ -59,9 +59,10 @@ interface SubDescriptionProps {
 }
 
 export const SubDescription = styled.Text<SubDescriptionProps>`
-  font-family: ${({ theme }) => theme.fonts.regular};
   color: ${({ theme, type }) => type === OccurrencesType.REPARO ? theme.colors.attention_light : theme.colors.text};
+  font-family: ${({ theme, type }) => type === OccurrencesType.REPARO ? theme.fonts.medium : theme.fonts.regular};
   font-size: ${RFValue(16)}px;
+  
   `;
 export const DescriptionContainer = styled.View`
   flex-direction: row;
@@ -69,7 +70,7 @@ export const DescriptionContainer = styled.View`
   max-width: 50%;
   `;
 
-export const FloorIcon = styled(MaterialCommunityIcons).attrs({
+export const FloorIcon = styled(MaterialCommunityIcons as any).attrs({
   name: "elevator-passenger",
 })`
   font-size: ${RFValue(20)}px;
@@ -80,6 +81,13 @@ export const ClockIcon = styled(FontAwesome5).attrs({
   name: "clock",
 })`
   font-size: ${RFValue(19)}px;
-  color: ${({ theme, type }) => type === OccurrencesType.REPARO ? theme.colors.attention_light : theme.colors.text};
+  color: ${({ theme, type }) => theme.colors.text};
+  margin-right: 8px;
+`;
+export const Alert = styled(FontAwesome5).attrs({
+  name: "exclamation-triangle",
+})`
+  font-size: ${RFValue(15.75)}px;
+  color: ${({ theme, type }) => theme.colors.attention_light};
   margin-right: 8px;
 `;

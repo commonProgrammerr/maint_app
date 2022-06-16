@@ -17,7 +17,7 @@ export type FeedItem = {
   type: OccurrencesType
   local: string
   piso: string
-  time?: string
+  time?: string | Date
 }
 
 export type UserAuthDTO = {

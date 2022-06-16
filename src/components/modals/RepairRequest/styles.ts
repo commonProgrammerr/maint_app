@@ -26,7 +26,7 @@ export const TimeContainer = styled.View`
   padding: 8px 12px;
 `;
 
-export const TimeIcon = styled(MaterialCommunityIcons).attrs({
+export const TimeIcon = styled(MaterialCommunityIcons as any).attrs({
   name: "timer-sand",
 })`
   font-size: ${RFValue(20)}px;
