@@ -19,22 +19,20 @@ interface CardChamadoProps {
 }
 
 function CardChamado({ data, onPress }: CardChamadoProps) {
-  const time = !!data?.time
-    ? new Date(data.time).toLocaleTimeString().slice(0, 5)
-    : "URGENTE";
+  const time = data?.time && new Date(data.time as any);
+  const time_str = time ? `${time.getHours()}:${time.getMinutes()}` : "URGENTE";
 
-  const isReparo = data?.type === OccurrencesType.REPARO;
-  const [showText, setShowText] = useState(!isReparo);
+  const isAlert = !data?.time;
+  const [showText, setShowText] = useState(!isAlert);
 
   useEffect(() => {
-    if (isReparo) {
+    if (isAlert) {
       const interval = setInterval(() => {
         setShowText((showText) => !showText);
       }, 360);
       return () => clearInterval(interval);
     }
   }, [showText]);
-
   return (
     <Container onPress={onPress}>
       <Content type={data?.type}>{data?.local}</Content>
@@ -42,12 +40,11 @@ function CardChamado({ data, onPress }: CardChamadoProps) {
         <DescriptionContainer
           style={{
             opacity: showText ? 1 : 0,
-            alignItems:
-              data?.type === OccurrencesType.REPARO ? "baseline" : "center",
+            alignItems: isAlert ? "baseline" : "center",
           }}
         >
-          {data?.type === OccurrencesType.REPARO ? <Alert /> : <ClockIcon />}
-          <SubDescription type={data?.type}>{time}</SubDescription>
+          {isAlert ? <Alert /> : <ClockIcon />}
+          <SubDescription alert={isAlert}>{time_str}</SubDescription>
         </DescriptionContainer>
         <DescriptionContainer style={{ justifyContent: "flex-end" }}>
           <FloorIcon />

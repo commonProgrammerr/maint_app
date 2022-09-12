@@ -53,6 +53,12 @@ export const BuildingLocale = styled(MaterialCommunityIcons as any).attrs({
   ${infoIconsStyle}
   margin-left: -3.5px;
 `;
+export const UserIcon = styled(MaterialCommunityIcons as any).attrs({
+  name: "account",
+})`
+  ${infoIconsStyle}
+  margin-left: -3.5px;
+`;
 export const WCIcon = styled(FontAwesome5).attrs({
   name: "restroom",
 })`

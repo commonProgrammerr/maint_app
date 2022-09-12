@@ -11,6 +11,8 @@ import { MultiCheckbox } from "../../Form/MultiCheckBox";
 import { api, SearchDTO } from "../../../services/api";
 import { OccurrencesType } from "../../../utils/occurrences";
 import { useAuth } from "../../../context/AuthContext";
+import { AxiosError } from "axios";
+import { Alert } from "react-native";
 
 interface CallRequestProps {
   visible: boolean;
@@ -46,27 +48,26 @@ export function SuportRequestModal({
     resolver: yupResolver(schema),
   });
 
-  const {
-    user: { grupe_id }
-  } = useAuth();
-  
+  const { user } = useAuth();
+
   async function handleSendHelpRequst(sumbtData: FormData) {
-    console.log(sumbtData);
     const new_description = `(${sumbtData?.apoio?.reduce(
       (p, c) => `${p}, ${c}`
     )}):\n${sumbtData.description}`;
-    console.log(new_description);
-    await api.post("/events/new", {
-      zone_id: grupe_id,
-      img_url: data?.img_url,
-      type: OccurrencesType.SUPORT,
-      description: new_description,
-      banheiro: data?.banheiro,
-      box: data?.box,
-      piso: data?.piso,
-      local: data?.local,
-      mac: data?.mac
-    });
+
+    try {
+      await api.post("/events/suport", {
+        id,
+        type: OccurrencesType.SUPORT,
+        description: new_description,
+        user_id: user.id,
+      });
+    } catch (error) {
+      const err = error as AxiosError;
+      Alert.alert(err.response?.data.msg);
+      if (err.isAxiosError) {
+      }
+    }
     onRequestClose?.();
   }
 
@@ -104,7 +105,7 @@ export function SuportRequestModal({
         </FormContainer>
         <Button
           bgColor="secondary"
-          onPress={handleSubmit(handleSendHelpRequst)}
+          onPress={handleSubmit(handleSendHelpRequst as any)}
         >
           <ButtonText>Solicitar suporte</ButtonText>
         </Button>

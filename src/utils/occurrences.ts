@@ -1,4 +1,4 @@
-import { api, SearchDTO } from "../services/api";
+import { api, FeedItem, SearchDTO } from "../services/api";
 
 export enum OccurrencesType {
   REPARO = 1,
@@ -7,12 +7,12 @@ export enum OccurrencesType {
   MAINT = 3,
 }
 
-export function OccurrencesType2String(type: OccurrencesType) {
-  switch (type) {
+export function OccurrencesType2String(data: FeedItem) {
+  switch (data.type) {
     case OccurrencesType.REPARO:
       return "Entupimento";
     case OccurrencesType.SUPORT:
-      return "Pedido de apoio";
+      return data.request_by ? `${data.request_by} está solicitando apoio` : "Pedido de apoio";
     case OccurrencesType.FINALIZADO:
       return "Fechado";
     case OccurrencesType.MAINT:
@@ -22,7 +22,7 @@ export function OccurrencesType2String(type: OccurrencesType) {
   }
 }
 
-export function getOccurenceData(id: string) {
+export function getOccurenceData(id: number) {
   return api.post<SearchDTO>("/events/search/", {
     id,
   });

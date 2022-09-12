@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Modal from "react-native-modal";
 
@@ -30,15 +30,16 @@ import {
   Info,
   InfoIcon,
   MapIcon,
+  UserIcon,
   WCIcon,
 } from "../../BasicInfosGrid/styles";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
 import { api } from "../../../services/api";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useAuthUser } from "../../../context/AuthContext";
 interface RepairRequestModalProps {
   visible: boolean;
   onRequestClose: () => void;
-  id: string;
+  id: number;
 }
 const delay = async (time: number) =>
   new Promise((resolve) => setTimeout(resolve, time));
@@ -67,6 +68,7 @@ export function RepairRequestModal({
     return await getOccurenceData(id);
   }, [id]);
 
+  const user = useAuthUser();
   const data = result?.data;
   useEffect(() => error && console.log(error), [loading, error]);
   useEffect(() => {
@@ -86,18 +88,20 @@ export function RepairRequestModal({
 
   async function handleAceptChamado() {
     try {
-      if (data?.type !== OccurrencesType.MAINT) {
+      if (data?.type === OccurrencesType.REPARO) {
         const url = `http://miimo.a4rsolucoes.com.br/apis/registro/?API=${data?.mac}&VALOR=3`;
         await axios.get(url);
-      } else {
-        api.post("/acept", {
-          id,
-          data,
-        });
       }
+
+      await api.post("acept", {
+        id,
+        user_id: user.id,
+      });
+
       onRequestClose?.();
       navigation?.navigate("Chamado", { id, data });
     } catch (error) {
+      console.error(error);
       alert("Não foi possivel prosseguir com a operação.");
     }
   }
@@ -134,23 +138,35 @@ export function RepairRequestModal({
               <StatusText>{data ? getTagName(data.type) : "Error"}</StatusText>
             </StatisWrapper>
           </Header>
+          {data?.requestBy && (
+            <InfoItem>
+              <UserIcon />
+              <Info>{data?.requestBy?.nome}</Info>
+            </InfoItem>
+          )}
           <InfoItem>
             <BuildingLocale />
             <Info>Aeroporto Internacional dos Guararapes</Info>
           </InfoItem>
-          <InfoItem>
-            <ElevatorIcon />
-            <Info>{data?.piso}</Info>
-          </InfoItem>
-          <InfoItem>
-            <WCIcon />
-            <Info>{data?.banheiro}</Info>
-          </InfoItem>
-          <InfoItem>
-            <MapIcon />
-            <Info>{data?.local}</Info>
-          </InfoItem>
-          {data?.type === OccurrencesType.MAINT || (
+          {data?.piso && (
+            <InfoItem>
+              <ElevatorIcon />
+              <Info>{data?.piso}</Info>
+            </InfoItem>
+          )}
+          {data?.banheiro && (
+            <InfoItem>
+              <WCIcon />
+              <Info>{data?.banheiro}</Info>
+            </InfoItem>
+          )}
+          {data?.local && (
+            <InfoItem>
+              <MapIcon />
+              <Info>{data?.local}</Info>
+            </InfoItem>
+          )}
+          {data?.box && data?.type !== OccurrencesType.MAINT && (
             <InfoItem>
               <InfoIcon name="toilet" />
               <Info>{data?.box}</Info>

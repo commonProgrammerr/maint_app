@@ -1,4 +1,4 @@
-import { Feather } from "@expo/vector-icons";
+import { Feather, FontAwesome5 } from "@expo/vector-icons";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as ImagePicker from "expo-image-picker";
 import { StatusBar } from "expo-status-bar";
@@ -25,7 +25,7 @@ import {
   Scroll,
   SendButton,
 } from "./styles";
-
+import axios, { AxiosError } from "axios";
 interface FormData {
   tools: string;
   problem: string;
@@ -104,17 +104,28 @@ export function ReportScreen({ route, navigation }: ReportScreenProps) {
     try {
       const report = {
         ...form,
-        id,
+        event_id: id,
         usr_id: user.id,
         zone_id: user.grupe_id,
       };
-      console.log(report);
 
-      await api.post("/events/close", report);
+      await axios.post("http://miimo.a4rsolucoes.com.br/apis/report/", {
+        ...report,
+        desc: (form as any).type_obs,
+      });
+      await api.post("/events/close", { id });
       navigation.popToTop();
     } catch (error) {
-      console.log(error);
-      alert("Não foi possivel enviar o relátorio...");
+      if ((error as AxiosError).isAxiosError) {
+        const err = error as AxiosError;
+        console.error(err.response?.data);
+        alert(
+          err.response?.data.msg || "Não foi possivel enviar o relátorio..."
+        );
+      } else {
+        console.error(error);
+        alert("Não foi possivel enviar o relátorio...");
+      }
     }
   }
 
@@ -135,8 +146,6 @@ export function ReportScreen({ route, navigation }: ReportScreenProps) {
       aspect: [4, 3],
       quality: 1,
     });
-
-    console.log(result);
   };
 
   const takePicture = async () => {
@@ -151,7 +160,6 @@ export function ReportScreen({ route, navigation }: ReportScreenProps) {
     const result = await ImagePicker.launchCameraAsync();
 
     // Explore the result
-    console.log(result);
   };
 
   return (
@@ -213,7 +221,7 @@ export function ReportScreen({ route, navigation }: ReportScreenProps) {
         </Scroll>
       </Form>
       <ButtonsWrapper>
-        <View
+        {/* <View
           style={{
             width: "100%",
             flexDirection: "row",
@@ -225,10 +233,10 @@ export function ReportScreen({ route, navigation }: ReportScreenProps) {
             <Feather size={RFValue(18)} color="white" name="camera" />
           </PhontoButton>
           <PhontoButton onPress={pickImage}>
-            <Feather size={RFValue(18)} color="white" name="folder-plus" />
+            <FontAwesome5 name="images" size={RFValue(18)} color="white" />
           </PhontoButton>
-        </View>
-        <SendButton onPress={handleSubmit(handleSendReport)}>
+        </View> */}
+        <SendButton onPress={handleSubmit(handleSendReport as any)}>
           <ButtonsText>Enviar!</ButtonsText>
         </SendButton>
         <BackButton onPress={navigation.goBack}>

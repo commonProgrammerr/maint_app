@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { Image, View } from "react-native";
+import { View } from "react-native";
 import {
   Container,
   Header,
@@ -11,41 +11,26 @@ import {
   UserName,
   UserWrampper,
   Icon,
-  ExitButton,
+  MenuButton,
 } from "./style";
 import { FeedsList } from "../../components/FeedList";
 import { RepairRequestModal } from "../../components/modals/RepairRequest";
 import { FeedScreenProps } from "../../routes/types";
 import { useAuth } from "../../context/AuthContext";
-import { imageB64 } from "./image";
 import { useFeed } from "../../context/FeedContext";
 import { NetworkContextProvider } from "../../context/NetworkContext";
 
 export function FeedScreen({ navigation }: FeedScreenProps) {
-  const [selectedId, setSelectedId] = useState("");
+  const [selectedId, setSelectedId] = useState<number | undefined>(undefined);
   function handleCloseModal() {
-    setSelectedId("");
+    setSelectedId(undefined);
   }
-
-  function handleOpemModal(id: string) {
+  function handleOpemModal(id: number) {
     setSelectedId(id);
   }
-  const [touchs, setTouchs] = useState(0);
   const { user, logout } = useAuth();
-  const { clear, loading } = useFeed();
+  const { loading } = useFeed();
 
-  useEffect(() => {
-    if (touchs >= 3) {
-      clear();
-    } else if (touchs > 0) {
-      const timer = setTimeout(() => {
-        setTouchs(0);
-      }, 1000);
-      return () => {
-        clearInterval(timer);
-      };
-    }
-  }, [touchs]);
   const imageSizeC = 120 / 45;
   const imageSize = 66;
   return (
@@ -54,30 +39,26 @@ export function FeedScreen({ navigation }: FeedScreenProps) {
       <Header>
         <UserWrampper>
           <UserInfo>
-            <View onTouchMove={() => setTouchs((last) => last + 1)}>
-              <Image
-                style={{
-                  width: imageSize * imageSizeC,
-                  height: imageSize,
-                }}
-                source={{ uri: imageB64 }}
-              />
-            </View>
-            {/* <User>
+            <Photo
+              source={{
+                uri: user.photo,
+              }}
+            />
+            <User>
               <UserGreeting>Olá,</UserGreeting>
               <UserName>{user.name}</UserName>
-            </User> */}
+            </User>
           </UserInfo>
-          <ExitButton onPress={logout}>
-            <Icon name="log-out" />
-          </ExitButton>
         </UserWrampper>
+        <MenuButton tintColor="#fff">
+          <Icon name="menu" />
+        </MenuButton>
       </Header>
       <NetworkContextProvider reloadTrigger={loading}>
         <FeedsList handleOpenModal={handleOpemModal} />
       </NetworkContextProvider>
       <RepairRequestModal
-        id={selectedId}
+        id={selectedId || 0}
         visible={!!selectedId}
         onRequestClose={handleCloseModal}
       />

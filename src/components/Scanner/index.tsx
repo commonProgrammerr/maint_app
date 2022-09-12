@@ -21,7 +21,6 @@ function Scanner({ children }: ScannerProps) {
     <Container
       onBarCodeScanned={(scan) => {
         alert(scan.data);
-        console.log(scan);
       }}
       style={StyleSheet.absoluteFillObject}
       barCodeTypes={["qr"]}

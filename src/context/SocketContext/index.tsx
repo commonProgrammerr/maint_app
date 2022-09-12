@@ -25,20 +25,22 @@ export function SocketProvider({ children }: Props) {
   useEffect(() => console.log("render", "socket"));
   return (
     <socketContext.Provider
-    value={{
-      socketIO: () => socket.current,
-      async connect(url) {
-        try {
-          if (socket.current) socket.current.disconnect();
-          socket.current = io(`${url}/${user.grupe_id}`);
-          return Promise.resolve();
-        } catch (err) {
-          return Promise.reject(err);
-        }
-      },
-      async disconnect() {
-        try {
-          if (socket.current) {
+      value={{
+        socketIO: () => socket.current,
+        async connect(url) {
+          try {
+            if (socket.current) socket.current.disconnect();
+            socket.current = io(url, {
+              path: user.grupe_id,
+            });
+            return Promise.resolve();
+          } catch (err) {
+            return Promise.reject(err);
+          }
+        },
+        async disconnect() {
+          try {
+            if (socket.current) {
               socket.current.disconnect();
             }
             return Promise.resolve();
@@ -47,7 +49,7 @@ export function SocketProvider({ children }: Props) {
           }
         },
       }}
-      >
+    >
       {children}
     </socketContext.Provider>
   );
@@ -55,14 +57,14 @@ export function SocketProvider({ children }: Props) {
 
 export function useSocket(fn?: (io: Socket) => void) {
   const context = useContext(socketContext);
-  
+
   if (!context) {
     throw new Error("This hook, must be used inside a 'SocketProvider'!");
   }
-  
+
   useEffect(() => {
     const cllbck = fn?.(context.socketIO());
-    
+
     if (cllbck) {
       return cllbck;
     }

@@ -55,12 +55,12 @@ export const Footer = styled.View`
 `;
 
 interface SubDescriptionProps {
-  type?: OccurrencesType
+  alert?: boolean
 }
 
 export const SubDescription = styled.Text<SubDescriptionProps>`
-  color: ${({ theme, type }) => type === OccurrencesType.REPARO ? theme.colors.attention_light : theme.colors.text};
-  font-family: ${({ theme, type }) => type === OccurrencesType.REPARO ? theme.fonts.medium : theme.fonts.regular};
+  color: ${({ theme, alert }) => alert ? theme.colors.attention_light : theme.colors.text};
+  font-family: ${({ theme, alert }) => alert ? theme.fonts.medium : theme.fonts.regular};
   font-size: ${RFValue(16)}px;
   
   `;

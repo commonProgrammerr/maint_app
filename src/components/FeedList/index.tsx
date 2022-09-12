@@ -11,7 +11,7 @@ import { grupeBy } from "../../utils/grupeBy";
 import EnptyFeed from "./EnptyFeed";
 import { useNetworkContext } from "../../context/NetworkContext";
 interface FeedListProps {
-  handleOpenModal: (id: string) => void;
+  handleOpenModal: (id: number) => void;
 }
 
 function getMonthName(month: number) {

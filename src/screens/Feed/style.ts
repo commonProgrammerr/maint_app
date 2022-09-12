@@ -1,7 +1,9 @@
-import styled from "styled-components/native";
+import styled, { css } from "styled-components/native";
 
 import { Feather } from '@expo/vector-icons'
 import { RFPercentage, RFValue } from "react-native-responsive-fontsize";
+import { DrawerToggleButton } from "@react-navigation/drawer";
+import { StatusBar } from "react-native";
 
 
 export const Container = styled.View`
@@ -12,12 +14,13 @@ export const Container = styled.View`
 
 
 export const Header = styled.View`
-  width: 100%;
-  height: ${RFPercentage(19)}px;
+  flex-direction: row;
+  padding: 16px 40px;
+  padding-left: 18px;
+  padding-top: ${18 + (StatusBar.currentHeight || 0)}px;
   background-color: ${props => props.theme.colors.primary};
-
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
 `
 
 export const UserInfo = styled.View`
@@ -27,8 +30,9 @@ export const UserInfo = styled.View`
 export const Photo = styled.Image`
   width: ${RFValue(55)}px;
   height: ${RFValue(55)}px;
-  
   border-radius: 10px;
+  background-color: ${props => props.theme.colors};
+
   `
 export const User = styled.View`
   margin-left: 17px;
@@ -51,15 +55,14 @@ export const UserWrampper = styled.View`
   align-items: center;
   `
 
-export const Icon = styled(Feather)`
+export const Icon = styled(Feather as any)`
   font-size: ${RFValue(24)}px;
   color: ${({ theme }) => theme.colors.shape};
-  background-color: ${({ theme }) => theme.colors.primary};
   padding: 6px;
 
 `
 
-export const ExitButton = styled.TouchableOpacity`
+export const MenuButton = styled(DrawerToggleButton)`
   align-items: center;
   justify-content: center;
   border-radius: 10px;

@@ -60,7 +60,7 @@ async function scheduleNewEventPushNotification(data: FeedItem) {
   await Notifications.scheduleNotificationAsync({
     content: {
       title: "Nova ocorrencia! ⏰",
-      body: `${OccurrencesType2String(data.type)} em ${data.local}`,
+      body: `${OccurrencesType2String(data)} em ${data.local}`,
       data: {},
     },
     trigger: { seconds: 1, channelId: "new-ocurrences" },
@@ -84,17 +84,17 @@ function removeCopy<T>(arr: T[], cb: (a: T, b: T) => boolean): T[] {
 }
 
 export function FeedProvider({ children }: FeedProviderProps) {
-  const { grupe_id } = useAuthUser();
+  const { grupe_id, id: user_id } = useAuthUser();
   const page = useAsync(
     async (page: number) => {
       // const colection = database.get("events");
       // const users = (await colection.query().fetch()) as Event[];
 
-      // console.log("users", users);
+      //
       return (
         await api.post<FeedDTO>("/events/feed/", {
           page,
-          zone_id: grupe_id,
+          user_id,
         })
       ).data;
 
@@ -132,7 +132,6 @@ export function FeedProvider({ children }: FeedProviderProps) {
         "@miimo_expo:feed",
         JSON.stringify(removeCopy(feed, (a, b) => a.id === b.id))
       );
-      console.log(feed);
     })();
   }, [feed]);
 
@@ -151,9 +150,11 @@ export function FeedProvider({ children }: FeedProviderProps) {
   useSocket((io) => {
     io?.on("@event:new", handleAddItem);
     io?.on("@event:close", handleRemoveItem);
+    io?.on("@event:get", handleRemoveGettedItem);
     return () => {
       io?.removeListener("@event:new", handleAddItem);
       io?.removeListener("@event:close", handleRemoveItem);
+      io?.removeListener("@event:get", handleRemoveGettedItem);
     };
   });
 
@@ -182,6 +183,12 @@ export function FeedProvider({ children }: FeedProviderProps) {
     setFeed((feed) => feed.filter((item) => item.id !== data.id));
   }, []);
 
+  const handleRemoveGettedItem = useCallback((data: any) => {
+    if (data.user_id !== user_id) {
+      setFeed((feed) => feed.filter((item) => item.id !== data.id));
+    }
+  }, []);
+
   const handleReloadFeed = useCallback(async () => {
     if (!page.loading && !page.error) {
       setFeed([]);
@@ -198,13 +205,7 @@ export function FeedProvider({ children }: FeedProviderProps) {
   return (
     <feedContext.Provider
       value={{
-        feed: removeCopy(feed, (a, b) => a.id === b.id).sort((a, b) => {
-          const a_time = a.time ? new Date(a.time) : new Date();
-          const b_time = b.time ? new Date(b.time) : new Date();
-          const time_dif = b_time.getTime() - a_time.getTime();
-          const type_dif = a.type - b.type;
-          return type_dif * 865e15 + Math.round(time_dif / 1000);
-        }),
+        feed: removeCopy(feed, (a, b) => a.id === b.id),
         loading: page.loading,
         error: page.error,
         loadNextFeedPage: handleLoadNextPage,

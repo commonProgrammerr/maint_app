@@ -1,4 +1,4 @@
-import { lighten } from 'polished'
+import { darken, lighten } from 'polished'
 
 export default {
   colors: {
@@ -20,6 +20,7 @@ export default {
     title: '#363f5f',
     text_dark: '#181818',
     background: '#F0F2F5',
+    background2: darken(0.42, '#F0F2F5'),
     transparent: '#0000'
   },
 
