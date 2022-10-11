@@ -1,22 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { StatusBar } from "expo-status-bar";
-import { View } from "react-native";
-import {
-  Container,
-  Header,
-  UserInfo,
-  Photo,
-  User,
-  UserGreeting,
-  UserName,
-  UserWrampper,
-  Icon,
-  MenuButton,
-} from "./style";
+import { Container, Header, Icon, LogoImage, MenuButton } from "./style";
 import { FeedsList } from "../../components/FeedList";
 import { RepairRequestModal } from "../../components/modals/RepairRequest";
 import { FeedScreenProps } from "../../routes/types";
-import { useAuth } from "../../context/AuthContext";
 import { useFeed } from "../../context/FeedContext";
 import { NetworkContextProvider } from "../../context/NetworkContext";
 
@@ -28,7 +15,6 @@ export function FeedScreen({ navigation }: FeedScreenProps) {
   function handleOpemModal(id: number) {
     setSelectedId(id);
   }
-  const { user, logout } = useAuth();
   const { loading } = useFeed();
 
   const imageSizeC = 120 / 45;
@@ -37,19 +23,7 @@ export function FeedScreen({ navigation }: FeedScreenProps) {
     <Container>
       <StatusBar style="light" />
       <Header>
-        <UserWrampper>
-          <UserInfo>
-            <Photo
-              source={{
-                uri: user.photo,
-              }}
-            />
-            <User>
-              <UserGreeting>Olá,</UserGreeting>
-              <UserName>{user.name}</UserName>
-            </User>
-          </UserInfo>
-        </UserWrampper>
+        <LogoImage />
         <MenuButton tintColor="#fff">
           <Icon name="menu" />
         </MenuButton>

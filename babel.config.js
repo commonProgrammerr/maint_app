@@ -5,6 +5,15 @@ module.exports = function (api) {
     plugins: [
       "react-native-reanimated/plugin",
       ["@babel/plugin-proposal-decorators", { legacy: true }],
+      "transform-inline-environment-variables",
+      // [
+      //   "module:react-native-dotenv",
+      //   {
+      //     envName: "APP_ENV",
+      //     moduleName: "@env",
+      //     path: ".env",
+      //   },
+      // ],
     ],
   };
 };

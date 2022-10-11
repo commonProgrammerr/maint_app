@@ -5,7 +5,7 @@ import { SuportRequestModal } from "../../components/modals/SuportRequest";
 import { OccurrencesType } from "../../utils/occurrences";
 import { ChamdoScreenProps } from "../../routes/types";
 import { BarCodeScanner, PermissionStatus } from "expo-barcode-scanner";
-import { Button, StyleSheet } from "react-native";
+// import { Button, StyleSheet } from "react-native";
 import {
   AlertIcon,
   ButtonsText,
@@ -19,7 +19,7 @@ import {
   ReportButton,
   Title,
 } from "./styles";
-import Scanner from "../../components/Scanner";
+// import Scanner from "../../components/Scanner";
 
 function handleGetTitle(type?: OccurrencesType) {
   switch (type) {
@@ -41,15 +41,15 @@ export function ChamadoScreen({ route, navigation }: ChamdoScreenProps) {
   const { id, data } = route.params;
   const image_url = data.img_url;
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [hasPermission, setHasPermission] = useState<boolean>();
-  const [scanned, setScanned] = useState(false);
-  const isMaintContext = data.type === OccurrencesType.MAINT;
-  useEffect(() => {
-    (async () => {
-      const { status } = await BarCodeScanner.requestPermissionsAsync();
-      setHasPermission(status === PermissionStatus.GRANTED);
-    })();
-  }, []);
+  // const [hasPermission, setHasPermission] = useState<boolean>();
+  // const [scanned, setScanned] = useState(false);
+  // const isMaintContext = data.type === OccurrencesType.MAINT;
+  // useEffect(() => {
+  //   (async () => {
+  //     const { status } = await BarCodeScanner.requestPermissionsAsync();
+  //     setHasPermission(status === PermissionStatus.GRANTED);
+  //   })();
+  // }, []);
 
   return (
     <>
@@ -67,9 +67,9 @@ export function ChamadoScreen({ route, navigation }: ChamdoScreenProps) {
             local={data?.local}
             genero={data?.banheiro}
           />
-          {data?.description && (
+          {data?.description ? (
             <LocalDescription>{String(data?.description)}</LocalDescription>
-          )}
+          ) : null}
         </DetailsWrapper>
         <ButtonsWrapper>
           <EndButton

@@ -1,18 +1,18 @@
-import { Feather, FontAwesome5 } from "@expo/vector-icons";
+// import { Feather, FontAwesome5 } from "@expo/vector-icons";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as ImagePicker from "expo-image-picker";
+// import * as ImagePicker from "expo-image-picker";
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { ScrollView, View } from "react-native";
-import { RFValue } from "react-native-responsive-fontsize";
+// import { ScrollView, View } from "react-native";
+// import { RFValue } from "react-native-responsive-fontsize";
 import * as Yup from "yup";
 import { Checkbox } from "../../components/Form/CheckBox";
 import { Dropdown } from "../../components/Form/Dropdow";
 import { Header, Title } from "../../components/Header";
 import { useAuth } from "../../context/AuthContext";
 import { ReportScreenProps } from "../../routes/types";
-import { api } from "../../services/api";
+import { api, MAINT_URL } from "../../services/api";
 import { getToolsList } from "../../utils/getToolsList";
 import { OccurrencesType } from "../../utils/occurrences";
 import {
@@ -21,11 +21,11 @@ import {
   ButtonsWrapper,
   Container,
   Form,
-  PhontoButton,
   Scroll,
   SendButton,
 } from "./styles";
 import axios, { AxiosError } from "axios";
+import { LoadingModal } from "../../components/modals/Loading";
 interface FormData {
   tools: string;
   problem: string;
@@ -100,20 +100,21 @@ export function ReportScreen({ route, navigation }: ReportScreenProps) {
     resolver: yupResolver(schema),
   });
 
-  async function handleSendReport(form: FormData) {
-    try {
-      const report = {
-        ...form,
-        event_id: id,
-        usr_id: user.id,
-        zone_id: user.grupe_id,
-      };
+  const [loading, setLoading] = useState(false);
 
-      await axios.post("http://miimo.a4rsolucoes.com.br/apis/report/", {
-        ...report,
-        desc: (form as any).type_obs,
+  const handleSendReport = useCallback(async (form: FormData) => {
+    try {
+      setLoading(true);
+
+      await api.post("/events/send_report", {
+        id,
+        report: {
+          ...form,
+          usr_id: user.id,
+          grupe_id: user.grupe_id,
+          descricao: (form as any).type_obs,
+        },
       });
-      await api.post("/events/close", { id });
       navigation.popToTop();
     } catch (error) {
       if ((error as AxiosError).isAxiosError) {
@@ -126,44 +127,49 @@ export function ReportScreen({ route, navigation }: ReportScreenProps) {
         console.error(error);
         alert("Não foi possivel enviar o relátorio...");
       }
+    } finally {
+      setLoading(false);
     }
-  }
-
-  useEffect(() => {
-    (async () => {
-      const { status } =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-      if (status !== "granted") {
-        alert("Sorry, we need camera roll permissions to make this work!");
-      }
-    })();
   }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const { status } =
+  //       await ImagePicker.requestMediaLibraryPermissionsAsync();
+  //     if (status !== "granted") {
+  //       alert("Sorry, we need camera roll permissions to make this work!");
+  //     }
+  //   })();
+  // }, []);
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-  };
+  // const pickImage = async () => {
+  //   let result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.All,
+  //     allowsEditing: true,
+  //     aspect: [4, 3],
+  //     quality: 1,
+  //   });
+  // };
 
-  const takePicture = async () => {
-    // Ask the user for the permission to access the camera
-    const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
+  // const takePicture = async () => {
+  //   // Ask the user for the permission to access the camera
+  //   const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
 
-    if (permissionResult.granted === false) {
-      alert("You've refused to allow this appp to access your camera!");
-      return;
-    }
+  //   if (permissionResult.granted === false) {
+  //     alert("You've refused to allow this appp to access your camera!");
+  //     return;
+  //   }
 
-    const result = await ImagePicker.launchCameraAsync();
+  //   const result = await ImagePicker.launchCameraAsync();
 
-    // Explore the result
-  };
+  //   // Explore the result
+  // };
 
   return (
     <Container>
+      <LoadingModal
+        visible={loading}
+        onRequestClose={() => setLoading(false)}
+      />
       <StatusBar style="light" />
       <Header bg="sucess">
         <Title>Relátorio</Title>

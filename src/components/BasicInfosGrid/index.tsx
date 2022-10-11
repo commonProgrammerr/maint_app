@@ -22,24 +22,30 @@ function BasicInfosGrid({ local, genero, piso, box }: BasicInfosGridProps) {
   return (
     <Container>
       <GridCollumn>
-        <GridItem>
-          <ElevatorIcon />
-          <Info>{piso}</Info>
-        </GridItem>
-        <GridItem>
-          <WCIcon />
-          <Info>{genero}</Info>
-        </GridItem>
-        <GridItem>
-          <MapIcon />
-          <Info>{local}</Info>
-        </GridItem>
-        {box && (
+        {piso ? (
+          <GridItem>
+            <ElevatorIcon />
+            <Info>{piso}</Info>
+          </GridItem>
+        ) : null}
+        {genero ? (
+          <GridItem>
+            <WCIcon />
+            <Info>{genero}</Info>
+          </GridItem>
+        ) : null}
+        {local ? (
+          <GridItem>
+            <MapIcon />
+            <Info>{local}</Info>
+          </GridItem>
+        ) : null}
+        {box ? (
           <GridItem>
             <InfoIcon name="toilet" />
             <Info>{box}</Info>
           </GridItem>
-        )}
+        ) : null}
       </GridCollumn>
     </Container>
   );

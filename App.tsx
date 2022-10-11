@@ -11,8 +11,8 @@ import defaultTheme from "./src/global/styles/theme";
 import { Routes } from "./src/routes";
 import { StatusBar } from "expo-status-bar";
 import { AuthProvider } from "./src/context/AuthContext";
-import { LoadingSplash } from "./src/components/LoadingSplash";
-import * as SplashScreen from "expo-splash-screen";
+// import { LoadingSplash } from "./src/components/LoadingSplash";
+// import * as SplashScreen from "expo-splash-screen";
 
 // SplashScreen.preventAutoHideAsync();
 

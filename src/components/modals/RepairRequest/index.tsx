@@ -34,7 +34,7 @@ import {
   WCIcon,
 } from "../../BasicInfosGrid/styles";
 import { useAsyncMemo } from "../../../hooks/useAsyncMemo";
-import { api } from "../../../services/api";
+import { api, MAINT_URL } from "../../../services/api";
 import { useAuthUser } from "../../../context/AuthContext";
 interface RepairRequestModalProps {
   visible: boolean;
@@ -88,11 +88,6 @@ export function RepairRequestModal({
 
   async function handleAceptChamado() {
     try {
-      if (data?.type === OccurrencesType.REPARO) {
-        const url = `http://miimo.a4rsolucoes.com.br/apis/registro/?API=${data?.mac}&VALOR=3`;
-        await axios.get(url);
-      }
-
       await api.post("acept", {
         id,
         user_id: user.id,

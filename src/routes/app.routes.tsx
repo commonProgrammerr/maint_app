@@ -12,23 +12,7 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 
-import { View } from "react-native";
-
-import {
-  DrawerContentScrollView,
-  DrawerItemList,
-  DrawerItem,
-} from "@react-navigation/drawer";
 import { SideBar } from "../components/SideBar";
-const NavigationDrawerStructure = (props: any) => {
-  //Structure for the navigatin Drawer
-  const toggleDrawer = () => {
-    //Props to open/close the drawer
-    props.navigationProps.toggleDrawer();
-  };
-
-  return <View style={{ flexDirection: "row" }}></View>;
-};
 
 function DefaultStack({ navigation }: any) {
   return (

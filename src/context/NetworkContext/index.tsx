@@ -1,4 +1,4 @@
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useLayoutEffect, useState } from "react";
 import { NetworkState, getNetworkStateAsync } from "expo-network";
 import {
   createContext,
@@ -16,25 +16,28 @@ interface NetworkContextProviderProps {
 }
 
 const context = createContext({} as NetworkContext);
+const Provider = context.Provider as unknown as React.FC<{
+  value: NetworkContext;
+}>;
 
 export function NetworkContextProvider({
   children,
   reloadTrigger,
 }: NetworkContextProviderProps) {
   const [networkState, setState] = useState<NetworkState>({});
-  useEffect(() => {
+  useLayoutEffect(() => {
     getNetworkStateAsync().then((result) => {
       setState(result);
     });
   }, [reloadTrigger]);
   return (
-    <context.Provider
+    <Provider
       value={{
         networkState,
       }}
     >
       {children}
-    </context.Provider>
+    </Provider>
   );
 }
 

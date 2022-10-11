@@ -11,7 +11,11 @@ import {
   Icon,
   Item,
   ItemText,
-  SideMenuProfileIcon,
+  Photo,
+  User,
+  UserGreeting,
+  UserInfo,
+  UserName,
 } from "./styles";
 import { imageB64 } from "../../screens/Feed/image";
 import Constants from "expo-constants";
@@ -20,12 +24,22 @@ import { useAuth } from "../../context/AuthContext";
 import { useFeed } from "../../context/FeedContext";
 
 export function SideBar(props: DrawerContentComponentProps) {
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
   const { clear } = useFeed();
 
   return (
     <Container>
-      <SideMenuProfileIcon source={{ uri: imageB64 }} />
+      <UserInfo>
+        <Photo
+          source={{
+            uri: user.photo,
+          }}
+        />
+        <User>
+          <UserGreeting>Olá,</UserGreeting>
+          <UserName>{user.name}</UserName>
+        </User>
+      </UserInfo>
       <DrawerContentScrollView {...props}>
         {/* <DrawerItem
           label={(props) => <ItemText>Configurações</ItemText>}

@@ -14,6 +14,7 @@ type HookOptions<T> = {
   onSuceed?: (data: T) => void
   onFail?: (err: Error) => void
   effect?: (key: string, ref: Cache<T>) => (void | (() => void))
+  clear_timeout?: number
 }
 
 function getDepsKey(deps: DependencyList): string {
@@ -30,8 +31,8 @@ export function useAsyncMemo<T>(fn: () => Promise<T>, deps: DependencyList, opts
   })
   const onFail = opts?.onFail
   const onSuceed = opts?.onSuceed
-
-  const key = getDepsKey(deps)
+  const time_key = Math.round(new Date().getTime() / (opts?.clear_timeout || 6e4))
+  const key = `${getDepsKey(deps)}@${time_key}`
 
   useEffect(() => {
     return opts?.effect?.(key, cacheRef.current)
@@ -40,7 +41,7 @@ export function useAsyncMemo<T>(fn: () => Promise<T>, deps: DependencyList, opts
   if (key === keyRef.current) {
     return state
   }
-  
+
   if (!(key in cacheRef.current)) {
     keyRef.current = key
     setState({
@@ -69,6 +70,6 @@ export function useAsyncMemo<T>(fn: () => Promise<T>, deps: DependencyList, opts
       result: cacheRef.current[key]
     })
   }
-  
+
   return state
 }

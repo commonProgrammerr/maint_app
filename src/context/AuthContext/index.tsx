@@ -11,7 +11,7 @@ import React, {
 
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
-import { api, UserAuthDTO } from "../../services/api";
+import { api, MAINT_URL, UserAuthDTO } from "../../services/api";
 import genId from "../../utils/genID";
 import axios from "axios";
 import { LoadingSplash } from "../../components/LoadingSplash";
@@ -43,7 +43,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 const userStorageKey = "@miimo_expo:user";
 
 async function handleAuth(data: AuthSubmitData) {
-  const url = "http://miimo.a4rsolucoes.com.br/apis/auth/";
+  const url = `${MAINT_URL}/auth/`;
   const response = await axios.post<UserAuthDTO>(url, {
     usr_log: data.login,
     usr_pass: data.password,
