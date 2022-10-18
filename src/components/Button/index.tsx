@@ -19,7 +19,7 @@ function Button({ children, bgColor, onPress, style, disabled }: ButtonProps) {
       style={style}
       disabled={disabled}
     >
-      {children}
+      {children as any}
     </Container>
   );
 }

@@ -100,6 +100,7 @@ export function RepairRequestModal({
       alert("Não foi possivel prosseguir com a operação.");
     }
   }
+  console.log(data);
 
   return (
     <Modal
@@ -126,7 +127,10 @@ export function RepairRequestModal({
           <Header>
             <TimeContainer>
               <TimeIcon />
-              <TimeInfo>{data && getTimeString(data.created_at, now)}</TimeInfo>
+              <TimeInfo>
+                {data &&
+                  getTimeString(data.data_agendamento ?? data.created_at, now)}
+              </TimeInfo>
             </TimeContainer>
             <StatisWrapper type={data?.type}>
               <AlertIcon />

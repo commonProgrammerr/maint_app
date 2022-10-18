@@ -91,6 +91,7 @@ export const ButtonWrapper = styled.View`
 
 export const AceptText = styled.Text`
   font-size: ${RFValue(14)}px;
+  min-height: ${RFValue(14)}px;
   font-family: ${(props) => props.theme.fonts.regular};
   color: ${(props) => props.theme.colors.shape};
 `;
@@ -98,6 +99,7 @@ export const AceptIcon = styled(FontAwesome5).attrs({
   name: "check-circle",
 })`
   font-size: ${RFValue(24)}px;
+  min-height: ${RFValue(24)}px;
   color: ${(props) => props.theme.colors.shape};
   margin-right: 12px;
 `;

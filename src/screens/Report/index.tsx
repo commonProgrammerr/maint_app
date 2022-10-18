@@ -26,6 +26,7 @@ import {
 } from "./styles";
 import axios, { AxiosError } from "axios";
 import { LoadingModal } from "../../components/modals/Loading";
+import { useAsyncMemo } from "../../hooks/useAsyncMemo";
 interface FormData {
   tools: string;
   problem: string;
@@ -71,7 +72,20 @@ const confirm_fields = [
 ];
 
 export function ReportScreen({ route, navigation }: ReportScreenProps) {
-  const ferramentas = getToolsList();
+  const ferramentas = useAsyncMemo(async () => {
+    try {
+      const result = await getToolsList();
+
+      return result?.tools?.map((tool: any) => ({
+        label: tool.name,
+        value: tool.name,
+      }));
+    } catch (error) {
+      console.error(error);
+      throw error;
+      return undefined;
+    }
+  }, []);
   const { user } = useAuth();
   const { id, data } = route.params;
   const isMaintContext = data.type === OccurrencesType.MAINT;
@@ -204,10 +218,11 @@ export function ReportScreen({ route, navigation }: ReportScreenProps) {
               name="tools"
               placeholder="Ferramenta utilizada"
               error={errors}
-              data={ferramentas.map((tool) => ({
-                label: tool.name,
-                value: tool.name,
-              }))}
+              data={
+                (ferramentas.loading
+                  ? [{ label: "Carregando...", value: "" }]
+                  : ferramentas.result) || []
+              }
             />
           )}
           {!isMaintContext && (
