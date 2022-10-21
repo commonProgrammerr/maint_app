@@ -20,9 +20,14 @@ const socketContext = createContext({} as SocketContext);
 type Props = { children: ReactNode };
 
 export function SocketProvider({ children }: Props) {
-  const socket = useRef(io(SOCKET_BASE_URL));
   const { user } = useAuth();
-  useEffect(() => console.log("render", "socket"));
+  const server_namespace = user.grupe_id ? `/${encodeURI(user.grupe_id)}` : "";
+  const socket = useRef(io(SOCKET_BASE_URL + server_namespace));
+  useEffect(() => {
+    console.log("render", "socket");
+    console.log("connected", server_namespace);
+  });
+
   return (
     <socketContext.Provider
       value={{
@@ -30,9 +35,8 @@ export function SocketProvider({ children }: Props) {
         async connect(url) {
           try {
             if (socket.current) socket.current.disconnect();
-            socket.current = io(url, {
-              path: user.grupe_id,
-            });
+            socket.current = io(url + server_namespace);
+            console.log("connected", url, server_namespace);
             return Promise.resolve();
           } catch (err) {
             return Promise.reject(err);

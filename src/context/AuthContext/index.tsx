@@ -64,7 +64,7 @@ export function AuthProvider({ children, loaded }: AuthProviderProps) {
         id: userDTO.usr_id,
         name: userDTO.usr_name,
         photo: undefined,
-        grupe_id: encodeURI(userDTO.usr_empresa).toLowerCase(),
+        grupe_id: userDTO.usr_grupo,
       };
 
       setUser(userInfo);
